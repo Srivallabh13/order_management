@@ -40,7 +40,7 @@ const Home = () => {
     <div className='bg-zinc-100 p-5'>
       <div className='flex flex-wrap mx-16 gap-10'>
         {Object.keys(products).map(key => (
-          <Product 
+          <Product
               key={key} 
               name={products[key].Name}
               price={products[key].Price}
