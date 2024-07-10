@@ -1,5 +1,5 @@
 import { Box, Divider, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material'
-import logo from '../assets/iphone12.jpg'
+import logo from '../assets/Images/iphone12.jpg'
 
 import React from 'react'
 

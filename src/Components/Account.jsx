@@ -1,10 +1,10 @@
 import { Card, Stack, Typography } from '@mui/material'
 import React from 'react'
-import Package from '../assets/package.png'
-import Profile from '../assets/profile.jpg'
-import ContactUs from '../assets/contactImage.png'
-import Security from '../assets/login_Security.png'
-import Terms from '../assets/terms.jpg'
+import Package from '../assets/Images/package.png'
+import Profile from '../assets/Images/profile.jpg'
+import ContactUs from '../assets/Images/contactImage.png'
+import Security from '../assets/Images/login_Security.png'
+import Terms from '../assets/Images/terms.jpg'
 import { Link } from 'react-router-dom'
 
 const Account = () => {
@@ -38,7 +38,7 @@ const Account = () => {
                 </Link>
                 </Card>
                 <Card variant='outlined' className='w-[30%] p-4 hover:bg-slate-100'>
-                <Link to={'/'}>
+                <Link to={'/security'}>
                     <Stack direction={'row'}>
                         <img src={Security} width={80} height={80} alt="package_image" />
                         <Stack direction={'column'} justifyItems={'center'}>
@@ -58,7 +58,7 @@ const Account = () => {
                     </Stack>
                 </Card>
                     <Card variant='outlined' className='w-[30%] p-4 hover:bg-slate-50'>
-                        <Link to={'/'}>
+                        <Link to={'/contact'}>
                         <Stack direction={'row'}>
                             <img src={ContactUs} width={80} height={80} alt="package_image" />
                             <Stack direction={'column'} justifyItems={'center'}>

@@ -1,6 +1,6 @@
 import { Button, Stack, Typography } from '@mui/material'
 import React from 'react'
-import Product from '../assets/iphone12.jpg'
+import Product from '../assets/Images/iphone12.jpg'
 
 const OrderProductCard = () => {
   return (

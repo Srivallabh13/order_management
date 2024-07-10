@@ -1,5 +1,5 @@
 import React from 'react'
-import logo from '../assets/iphone12.jpg'
+import logo from '../assets/Images/iphone12.jpg'
 const Product = ({name, price,desc}) => {
   return (
     <div className='p-5  rounded-xl bg-white'>

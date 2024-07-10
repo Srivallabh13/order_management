@@ -9,6 +9,8 @@ import Cart from './Components/Cart';
 import Account from './Components/Account';
 import OrderDetails from './Components/OrderDetails';
 import UserOrders from './Components/UserOrders';
+import LoginSecurity from './Components/LoginSecurity';
+import Contact from './Components/ContactUs';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
@@ -24,6 +26,8 @@ function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/orders" element={<UserOrders />} />
           <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/security" element={<LoginSecurity />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </BrowserRouter>
     </div>
