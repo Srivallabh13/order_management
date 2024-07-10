@@ -7,23 +7,50 @@ const Cart = () => {
     0: {
       Name: "Iphone",
       Price: 100000,
-    Desc:"Lorem Ipsum"
-
-   },
-   1: {
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    1: {
       Name: "Tablet",
       Price: 25000,
-    Desc:"Lorem Ipsum"
-   },
-   2:{
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    2:{
       Name: "TV",
       Price: 750000,
-    Desc:"Lorem Ipsum"
-   },
-   3:{
-    Name:"PS5",
-    Price: 50000,
-    Desc:"Lorem Ipsum"
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    3:{
+      Name:"PS5",
+      Price: 50000,
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    4:{
+      Name:"PS5",
+      Price: 50000,
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    5:{
+      Name:"PS5",
+      Price: 50000,
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    6:{
+      Name:"PS5",
+      Price: 50000,
+      Desc:"Lorem Ipsum",
+      Quantity:2
+    },
+    7:{
+      Name:"PS5",
+      Price: 50000,
+      Desc:"Lorem Ipsum",
+      Quantity:2
    },
   }
   return (
@@ -32,15 +59,18 @@ const Cart = () => {
         <p className='text-4xl pb-10 font-bold'>Shopping Cart</p>
         <p className='font-bold'> Products in Cart</p>
         <Divider color='black' variant='fullWidth' />
-        
-        {Object.keys(ProductsInCart).map(key => (
-          <CartProductCard 
-              key={key} 
-              name={ProductsInCart[key].Name}
-              price={ProductsInCart[key].Price}
-              desc={ProductsInCart[key].Desc}
-          />
-        ))}
+          <div className="h-[450px] overflow-y-scroll">
+
+          {Object.keys(ProductsInCart).map(key => (
+            <CartProductCard 
+            key={key} 
+            name={ProductsInCart[key].Name}
+            price={ProductsInCart[key].Price}
+            desc={ProductsInCart[key].Desc}
+            quantity={ProductsInCart[key].Quantity}
+            />
+          ))}
+          </div>
       
       </div>
       <Card className='p-4 w-[30%] h-fit' >
