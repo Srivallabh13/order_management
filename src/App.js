@@ -6,6 +6,7 @@ import Navbar from './Components/Navbar';
 import Register from './Components/Register';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Cart from './Components/Cart';
+import SingleProductPage from './Components/SingleProductPage';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
@@ -18,6 +19,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/singleporoduct" element={<SingleProductPage  />} />
         </Routes>
       </BrowserRouter>
     </div>
