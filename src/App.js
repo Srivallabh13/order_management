@@ -19,7 +19,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Cart from './Components/Cart';
 
 function App() {
-  axios.defaults.baseURL = "http://localhost:7170/api"
+  axios.defaults.baseURL = "http://localhost:5062/api"
   return (
     <div className='h-screen'>
       <BrowserRouter>
