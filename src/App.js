@@ -10,6 +10,8 @@ import SingleProductPage from './Components/SingleProductPage';
 import Account from './Components/Account';
 import OrderDetails from './Components/OrderDetails';
 import UserOrders from './Components/UserOrders';
+import Profile from './Components/Profile';
+import EditProfileDialog from './Components/EditProfileDialog';
 import LoginSecurity from './Components/LoginSecurity';
 import Contact from './Components/ContactUs';
 
@@ -30,6 +32,9 @@ function App() {
           <Route path="/account" element={<Account />} />
           <Route path="/orders" element={<UserOrders />} />
           <Route path="/orderdetails" element={<OrderDetails />} />
+          <Route path="/Profile" element={<Profile />} />
+          <Route path="/EditProfileDialog" element={<EditProfileDialog />} />
+          
         </Routes>
       </BrowserRouter>
     </div>
