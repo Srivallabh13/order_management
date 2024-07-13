@@ -17,6 +17,7 @@ const Login = () => {
         'Content-Type': 'application/json'
       }
     });
+    alert("login successful");
     console.log(data);
   }
 

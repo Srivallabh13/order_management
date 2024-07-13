@@ -22,6 +22,7 @@ const Register = () => {
         'Content-Type': 'application/json'
       }
     });
+    alert("register successful");
     console.log(response.data);
   }
 
