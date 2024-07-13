@@ -1,6 +1,6 @@
 import React from 'react'
-import logo from "../assets/iphone12.jpg"
-import { Box, Container, Divider, Fab, Stack, Typography } from '@mui/material'
+import logo from "../assets/Images/iphone12.jpg"
+import { Box,Container, Divider, Fab, Stack, Typography } from '@mui/material'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import PaymentIcon from '@mui/icons-material/Payment';
