@@ -1,12 +1,15 @@
-import axios from 'axios'
+import { Typography } from '@mui/material'
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { RegisterUser } from '../Actions/UserActions'
 
 const Register = () => {
-  // FormData formData = new FormData();
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
+  const dispatch = useDispatch();
 
   const handleSubmit = async(e)=> {
     e.preventDefault()
@@ -16,15 +19,9 @@ const Register = () => {
     formData.append('Email', email);
     formData.append('Password', password); 
     formData.append("Username", username);
-
-    const response = await axios.post('/account/register', formData, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    console.log(response.data);
+    dispatch(RegisterUser(formData));
+    window.location.href = '/';
   }
-
 
   return (
     <div className='w-full h-full'>
@@ -40,6 +37,9 @@ const Register = () => {
               <label htmlFor="password">Password</label>
               <input className='p-3 border border-black rounded-md' value={password} onChange={(e)=>setPassword(e.target.value)} placeholder='******' type="password" name="password" id="" />
               <button className='p-2 my-3 bg-purple-400' type='submit'>Register</button>
+            <Link to={'/'}>
+              <Typography p={1} variant='subtitle1'> Already have an account? <span className='text-blue-700 '>Sign In</span></Typography>
+            </Link>
             </div>
         </form>
     </div>

@@ -2,13 +2,20 @@ import { Box, Divider, FormControl, InputLabel, MenuItem, Select, Stack, Typogra
 import logo from '../assets/Images/iphone12.jpg'
 
 import React from 'react'
+import { useDispatch } from 'react-redux';
+import { RemoveFromCart } from '../Actions/ProductActions';
 
-const CartProductCard = ({name, price,desc,quantity}) => {
-    const [quant, setQuantity] = React.useState(quantity);
-
-  const handleChange = (event) => {
-    setQuantity(event.target.value);
-  };
+const CartProductCard = ({id,name, price,desc,quantity, onQuantityChange}) => {
+    const dispatch = useDispatch();
+    
+    const handleChange = (event) => {
+        const newQuantity = event.target.value;
+        onQuantityChange(id, newQuantity);
+      };
+    
+  const handleClick = () => {
+    dispatch(RemoveFromCart(id));
+  }
   return (
     <>
     <Box className="w-full p-2 " >
@@ -19,24 +26,24 @@ const CartProductCard = ({name, price,desc,quantity}) => {
                 <Stack direction={'column'} >
                     <Typography fontWeight={600} variant='h6'>{name}</Typography>
                     <Typography variant='caption'>{desc}</Typography>
-                    <a className='text-blue '>Remove</a>
+                    <button onClick={handleClick} className='text-blue-600 w-fit'>Remove</button>
                 </Stack>
                 <Stack direction={'row'} alignItems={'center'}  gap={3} mx={2}>
-                    <Typography>₹{price}</Typography>
+                    <Typography>₹{price*quantity}</Typography>
                     <FormControl sx={{ m: 1, minWidth:70 }} size="small">
                         <InputLabel id="demo-select-small-label">Quantity</InputLabel>
                         <Select
                             labelId="demo-select-small-label"
                             id="demo-select-small"
-                            value={quant}
+                            value={quantity}
                             label="Quantity"
                             onChange={handleChange}
                             >
                             <MenuItem value={1}>1</MenuItem>
                             <MenuItem value={2}>2</MenuItem>
                             <MenuItem value={3}>3</MenuItem>
-                            <MenuItem value={3}>4</MenuItem>
-                            <MenuItem value={3}>5</MenuItem>
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
                         </Select>
                     </FormControl>
                 </Stack>

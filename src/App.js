@@ -12,25 +12,43 @@ import OrderDetails from './Components/OrderDetails';
 import UserOrders from './Components/UserOrders';
 import LoginSecurity from './Components/LoginSecurity';
 import Contact from './Components/ContactUs';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUser } from './Actions/UserActions';
+import { useEffect } from 'react';
+
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
+  const { user } = useSelector((state)=>state.currentUser);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUser());
+  }, [dispatch]);
+
   return (
     <div className='h-screen'>
       <BrowserRouter>
-       <Navbar />
+        <Navbar />
         <Routes>
-        <Route path='/login' element={<Login />}/>
-          <Route path="/register" element={<Register />} />
           <Route path="/" element={<Home />} />
+      {user && user!==null ? 
+        <>
           <Route path="/cart" element={<Cart />} />
-<<<<<<< HEAD
-          <Route path="/singleporoduct" element={<SingleProductPage  />} />
-=======
+          <Route path="/singleproduct/:id" element={<SingleProductPage/>} />
           <Route path="/account" element={<Account />} />
           <Route path="/orders" element={<UserOrders />} />
-          <Route path="/orderdetails" element={<OrderDetails />} />
-        </Routes>
+          <Route path="/orderdetails/:id" element={<OrderDetails />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/security" element={<LoginSecurity />} />
+        </>
+       : 
+       <>
+       <Route path='/login' element={<Login />}/>
+      <Route path="/register" element={<Register />} />
+       </>
+      }
+      </Routes>
       </BrowserRouter>
     </div>
   );
