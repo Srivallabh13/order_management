@@ -1,5 +1,5 @@
 import { Card, Divider, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import OrderProductCard from "../Utils/OrderProductCard";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,10 +20,9 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getUserById(currentUser.id));
-  }, [dispatch]);
+  }, [dispatch,currentUser.id]);
   return (
     <div className="mx-72 mt-2 h-full">
-      {/* {console.log(order, user)} */}
       <Typography variant="h4" pt={3} fontWeight={600}>
         Order Details
       </Typography>

@@ -31,7 +31,7 @@ const Account = () => {
             </Link>
           </Card>
           <Card variant="outlined" className="w-[30%] p-4 hover:bg-slate-100">
-            <Link to={"/"}>
+            <Link to={"/profile"}>
               <Stack direction={"row"}>
                 <img src={Profile} width={80} height={80} alt="package_image" />
                 <Stack direction={"column"} justifyItems={"center"}>

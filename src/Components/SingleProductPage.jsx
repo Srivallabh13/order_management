@@ -5,19 +5,26 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import PaymentIcon from '@mui/icons-material/Payment';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { AddToCart } from '../Actions/ProductActions';
+import { getUserById } from '../Actions/UserActions';
 
 const SingleProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [product, setProduct] = useState(null);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const {user} = useSelector((state)=>state.currentUser)
+  const {user} = useSelector((state)=>state.currentUser);
+  const userDetails = useSelector((state)=>state.userById.user);
   const { id } = useParams();
+
+  useEffect(()=>{
+    dispatch(getUserById(user?.id));
+  }, [dispatch, user?.id])
 
     const handleAddToCart = (product, quantity) => {
       dispatch(AddToCart({ ...product, quantity }));
@@ -34,8 +41,8 @@ const SingleProductPage = () => {
         price: product.price * quantity,
       };
       const response = await axios.post('Order/create', orderData);
-      console.log('Order created successfully:', response.data);
-      // Handle successful order creation (e.g., show a confirmation message, redirect to order summary page)
+
+      navigate('/orderSuccess');
     } catch (error) {
       console.error('Error creating order:', error);
       // Handle error (e.g., show an error message)
@@ -73,14 +80,14 @@ const SingleProductPage = () => {
       {product && (
         <Stack className='w-[30%] p-5' gap={1}>
           <Stack direction={'column'} gap={1}>
-            <Typography variant='h6' fontWeight={500}>
+            <Typography variant='h6' fontWeight={600}>
               {product.productName}
             </Typography>
             <Typography variant='caption' fontWeight={100}>
               {product.description}
             </Typography>
-            <Typography variant='caption' fontWeight={600} className='text-2xl'>
-              ₹ {product.price}
+            <Typography variant='body' fontWeight={600} className='text-2xl'>
+              ₹ {product.price * quantity}
             </Typography>
             <Typography variant='caption' fontWeight={300} fontSize={15} className='text-1xl'>
               Inclusive of all taxes
@@ -132,7 +139,7 @@ const SingleProductPage = () => {
         <Box display="flex" alignItems="center" mb={3}>
           <LocationOnIcon />
           <Typography variant='caption' ml={1} color={'brown'}>
-            Delivering to Mumbai 400001-
+            Delivering to {userDetails?.address} {userDetails?.pinCode}
           </Typography>
         </Box>
 

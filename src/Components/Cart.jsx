@@ -3,7 +3,8 @@ import React, { useEffect, useState } from 'react'
 import CartProductCard from './CartProductCard'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { clearErrors, clearState, UpdateCart } from '../Actions/ProductActions'
+import { clearState, UpdateCart } from '../Actions/ProductActions'
+import { useNavigate } from 'react-router-dom'; 
 
 const Cart = () => {
   const [amount, setAmount] = useState(0);
@@ -11,7 +12,7 @@ const Cart = () => {
   const {products} = useSelector((state)=>state.cart);
   const {user} = useSelector((state)=>state.currentUser)
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();  
   const handleCheckout = async (products) => {
     try {
       let cartProducts = [];
@@ -25,9 +26,10 @@ const Cart = () => {
         custId: user.id, // Replace with actual customer ID
         price: total
       };
-      const response = await axios.post('Order/create', orderData);
+      await axios.post('Order/create', orderData);
       sessionStorage.removeItem('cart');
       dispatch(clearState());
+      navigate('/orderSuccess');  
       // Handle successful order creation (e.g., show a confirmation message, redirect to order summary page)
     } catch (error) {
       console.error('Error creating order:', error);

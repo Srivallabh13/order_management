@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { getUser, LoginUser } from '../Actions/UserActions';
+import { LoginUser } from '../Actions/UserActions';
 import { Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -18,8 +18,6 @@ const Login = () => {
 
     dispatch(LoginUser(formData));
     navigate('/');
-    // window.location.href = ('/');
-    // navigate('/',rep);
   }
 
   return (

@@ -2,7 +2,6 @@ import { Card, Divider, Stack, Typography } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import OrderProductCard from '../Utils/OrderProductCard'
-import { blue } from '@mui/material/colors'
 
 const OrderedProduct = ({order, user}) => {
     const firstProduct = order?.products?.$values?.[0];
