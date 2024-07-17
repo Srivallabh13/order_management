@@ -24,18 +24,24 @@ import OrderSuccess from './Components/OrderSuccess';
 import OrderList from './Components/Admin/OrderList';
 import ProductList from './Components/Admin/ProductList';
 import Profile from './Components/Profile';
+import { Box, LinearProgress } from '@mui/material';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
-  const { user } = useSelector((state)=>state.currentUser);
+  const { user, loading } = useSelector((state)=>state.currentUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
-
+  
   return (
     <div className='h-screen'>
+      {loading && (
+        <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+          <LinearProgress color='secondary' />
+        </Box>
+      )}
       <BrowserRouter>
         <Navbar />
         <Routes>

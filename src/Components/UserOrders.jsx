@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material'
+import { Box, LinearProgress, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import OrderedProduct from './OrderedProduct'
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,8 +12,13 @@ const UserOrders = () => {
     dispatch(OrdersByUser(user.id));
   }, [dispatch,user.id])
 
-  const { orders } = useSelector((state)=>state.userOrders);
+  const { orders, loading } = useSelector((state)=>state.userOrders);
 
+  if(loading) {
+    return <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+  }
   return (
     <div className='mx-72 mt-2 h-full'>
         <Typography variant='h4' py={3} fontWeight={600}>Your Orders</Typography>

@@ -83,13 +83,13 @@ export const RegisterUser = (formData) => async(dispatch)=> {
     }
 }
 
-export const UpdateUser = (id, formJson) => async(dispatch)=> {
+export const UpdateUser = (id, formData) => async(dispatch)=> {
     try {
         dispatch({
             type:UPDATE_USER_REQUEST
         })
-
-        const {data} = await axios.put(`/User/update/${id}`, formJson, {
+        console.log(formData);
+        const {data} = await axios.put(`/User/update/${id}`, formData, {
             headers: {
               'Content-Type': 'application/json'
             }
