@@ -15,19 +15,33 @@ import Contact from './Components/ContactUs';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from './Actions/UserActions';
 import { useEffect } from 'react';
-
+import Dashboard from './Components/Admin/Dashboard';
+import ProcessOrder from './Components/Admin/ProcessOrder';
+import NewProduct from './Components/Admin/NewProduct';
+import UpdateProduct from './Components/Admin/UpdateProduct';
+import UsersList from './Components/Admin/UsersList';
+import OrderSuccess from './Components/OrderSuccess';
+import OrderList from './Components/Admin/OrderList';
+import ProductList from './Components/Admin/ProductList';
+import Profile from './Components/Profile';
+import { Box, LinearProgress } from '@mui/material';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
-  const { user } = useSelector((state)=>state.currentUser);
+  const { user, loading } = useSelector((state)=>state.currentUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getUser());
   }, [dispatch]);
-
+  
   return (
     <div className='h-screen'>
+      {loading && (
+        <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+          <LinearProgress color='secondary' />
+        </Box>
+      )}
       <BrowserRouter>
         <Navbar />
         <Routes>
@@ -40,7 +54,20 @@ function App() {
           <Route path="/orders" element={<UserOrders />} />
           <Route path="/orderdetails/:id" element={<OrderDetails />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/security" element={<LoginSecurity />} />
+          <Route path="/orderSuccess" element={<OrderSuccess />} />
+          {user?.role === "admin" && 
+          <>
+          <Route path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/orders" element={<OrderList />} />
+          <Route path="/admin/processOrder/:id" element={<ProcessOrder />} />
+          <Route path="/admin/products" element={<ProductList />} />
+          <Route path="/admin/product/create" element={<NewProduct />} />
+          <Route path="/admin/update/:id" element={<UpdateProduct />} />
+          <Route path="/admin/users" element={<UsersList />} />
+          </>
+        }
         </>
        : 
        <>
