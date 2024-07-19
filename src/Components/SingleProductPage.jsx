@@ -56,7 +56,7 @@ const SingleProductPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`https://localhost:7076/api/Products/${id}`);
+        const response = await axios.get(`http://localhost:5103/api/Products/${id}`);
         setProduct(response.data);
         setLoading(false);
       } catch (error) {

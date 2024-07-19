@@ -25,6 +25,7 @@ const Cart = () => {
         cartProducts = [...cartProducts, { id: product.productID, quantity: product.quantity }];
         total += product.quantity*product.price;
       })
+      console.log(user);
       const orderData = {
         products: cartProducts,
         custId: user.id, // Replace with actual customer ID
