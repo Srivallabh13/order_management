@@ -20,12 +20,14 @@ const Cart = () => {
         cartProducts = [...cartProducts, { id: product.productID, quantity: product.quantity }];
         total += product.quantity*product.price;
       })
+      console.log(user);
       const orderData = {
         products: cartProducts,
         custId: user.id, // Replace with actual customer ID
         price: total
       };
-      const response = await axios.post('Order/create', orderData);
+      console.log(orderData);
+      const response = await axios.post('/Order/create', orderData);
       sessionStorage.removeItem('cart');
       dispatch(clearState());
       // Handle successful order creation (e.g., show a confirmation message, redirect to order summary page)

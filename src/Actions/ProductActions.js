@@ -7,7 +7,7 @@ export const getProducts = () => async(dispatch)=> {
             type:ALL_PRODUCT_REQUEST
         })
 
-        const {data} = await axios.get('https://localhost:7076/api/Products');
+        const {data} = await axios.get('http://localhost:5103/api/Products');
         dispatch({
             type:ALL_PRODUCT_SUCCESS,
             payload: data
@@ -26,7 +26,7 @@ export const getProductDetails = (id) => async(dispatch)=> {
             type:PRODUCT_DETAILS_REQUEST
         })
         // console.log(id);
-        const {data} = await axios.get(`https://localhost:7076/api/Products/${id}`);
+        const {data} = await axios.get(`http://localhost:5103/api/Products/${id}`);
         // console.log(data)
 
         dispatch({
