@@ -10,7 +10,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="sidebar p-8 bg-white flex flex-col">
+    <div className="sidebar h-full p-8 bg-white flex flex-col">
       <Link to="/admin/dashboard" className="p-4 text-gray-700 hover:text-tomato transition-transform transform hover:scale-110">
         <p className="flex items-center">
           <Dashboard className="mr-2" /> Dashboard

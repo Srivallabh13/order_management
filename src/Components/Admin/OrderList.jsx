@@ -9,20 +9,17 @@ import SideBar from "./Sidebar";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { AllOrder, DeleteOrder } from "../../Actions/OrderAction";
-
-// const ordersData = [
-//   { id: "1", itemsQty: 3, amount: 150, status: "Delivered" },
-//   { id: "2", itemsQty: 2, amount: 100, status: "Processing" },
-//   { id: "3", itemsQty: 1, amount: 50, status: "Pending" },
-// ];
+import { Box, LinearProgress } from "@mui/material";
 
 const OrderList = ({ history }) => {
   const ordersData = useSelector((state)=>state.allOrders.orders);
+  const {loading} = useSelector((state)=>state.allOrders);
   const dispatch = useDispatch();
   useEffect(()=> {
     dispatch(AllOrder());
   },[dispatch])
   const [orders, setOrders] = useState(ordersData);
+  const [load, setLoad] = useState(false);
   useEffect(() => {
     if (ordersData) {
       setOrders(ordersData);
@@ -31,19 +28,13 @@ const OrderList = ({ history }) => {
   const alert = useAlert();
 
   const deleteOrderHandler = (id) => {
+    setLoad(true);
     const updatedOrders = orders.filter((order) => order.id !== id);
     setOrders(updatedOrders);
     dispatch(DeleteOrder(id));
     alert.success("Order Deleted Successfully");
+    setLoad(false);
   };
-
-  useEffect(() => {
-    // Example: Fetching data from an API endpoint
-    // Replace with your actual data fetching logic
-    // fetchOrders()
-    //   .then(data => setOrders(data))
-    //   .catch(error => alert.error(error.message));
-  }, [alert]);
 
   const columns = [
     { field: "id", headerName: "Order ID", minWidth: 150, flex: 1 },
@@ -88,11 +79,16 @@ const OrderList = ({ history }) => {
     },
   ];
 
+  if(loading || load) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className=" w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <SideBar className="w-1/5" />
 
-      <div className="md:col-span-4 border-l border-gray-200 bg-white p-6 overflow-auto">
+      <div className=" md:col-span-4 border-l border-gray-200 bg-white p-6 overflow-auto">
         <MetaData title="Order List - Admin Panel" />
         <h1 className="text-2xl font-semibold mt-7 text-black-700 text-center mb-6">ALL ORDERS</h1>
 

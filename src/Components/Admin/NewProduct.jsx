@@ -10,7 +10,9 @@ import DataThresholdingIcon from '@mui/icons-material/DataThresholding';
 import SideBar from "./Sidebar";
 import MetaData from "../MetaData";
 import { useDispatch } from "react-redux";
-import { CreateProduct } from "../../Actions/ProductActions";
+import { CreateProduct, getProducts } from "../../Actions/ProductActions";
+import { useNavigate } from "react-router-dom";
+import { Box, LinearProgress } from "@mui/material";
 
 const NewProduct = ({ history }) => {
   const alert = useAlert();
@@ -20,9 +22,12 @@ const NewProduct = ({ history }) => {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState();
   const [threshold, setThreshold] = useState();
+  const [loading, setLoading] = useState();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
+    setLoading(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append("productName", name);
@@ -31,12 +36,25 @@ const NewProduct = ({ history }) => {
     formData.append("stockLevel", stock);
     formData.append("threshold", threshold);
 
-    dispatch(CreateProduct(formData));
+    dispatch(CreateProduct(formData)).then(() => {
+      dispatch(getProducts());
+      navigate('/admin/products');
+      alert.success("Created the product successfully!");
+      setLoading(false);
+    })
+    .catch(error => {
+      alert.error("Failed to update status: " + error.message);
+    });
   };
 
+  if(loading) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
 
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <SideBar />
       <div className="md:col-span-4 border-l border-gray-200 bg-gray-100 p-12 min-h-screen">
         <MetaData title="Create Product" />

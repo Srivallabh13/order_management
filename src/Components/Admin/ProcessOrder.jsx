@@ -3,7 +3,7 @@ import MetaData from "../MetaData";
 import { useParams } from "react-router-dom";
 import SideBar from "./Sidebar";
 import { AccountTree } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { OrderById, UpdateOrderStatus } from "../../Actions/OrderAction";
 import { getUserById } from "../../Actions/UserActions";
@@ -13,7 +13,8 @@ import { useAlert } from "react-alert";
 const ProcessOrder = () => {
   const {id} = useParams();
   const userData = useSelector((state)=>state.userById.user);
-  const {order} = useSelector((state)=>state.orderById);
+  const load = useSelector((state)=>state.userById.loading);
+  const {order, loading} = useSelector((state)=>state.orderById);
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -37,9 +38,14 @@ const ProcessOrder = () => {
       alert.error("Failed to update status: " + error.message);
     });
   };
+  if(loading || load) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
 
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <MetaData title="Process Order" />
       <SideBar className="md:col-span-1" />
       <div className="md:col-span-3 border-l border-gray-200 bg-white p-6 pr-0 overflow-auto">

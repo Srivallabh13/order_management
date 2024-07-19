@@ -3,28 +3,50 @@ import { useAlert } from "react-alert";
 import MetaData from "../MetaData";
 // import AccountTreeIcon from "@material-ui/icons/AccountTree";
 import SideBar from "./Sidebar";
-import { AttachMoney, Description, Spellcheck, Storage } from "@mui/icons-material";
-import { Button, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { AttachMoney, DataThresholding, Description, Spellcheck, Storage } from "@mui/icons-material";
+import { Box, Button, LinearProgress, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { updateProduct } from "../../Actions/ProductActions";
 
 const UpdateProduct = ({ history }) => {
+  const {id} = useParams();
   const alert = useAlert();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
+  const [price, setPrice] = useState();
   const [description, setDescription] = useState('');
-  const [Stock, setStock] = useState('');
+  const [stock, setStock] = useState();
+  const [threshold, setThreshold] = useState();
+  const [loading, setLoading] = useState(false);
 
   const updateProductSubmitHandler = (e) => {
     e.preventDefault();
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("productName", name);
+    formData.append("price", price===undefined?0:price);
+    formData.append("description", description);
+    formData.append("stockLevel", stock===undefined?0:stock);
+    formData.append("threshold", threshold===undefined?0:threshold);
+    dispatch(updateProduct(id, formData));
     alert.success("Product Updated Successfully");
+    setLoading(false);
     navigate('/admin/products');
   };
-
+  const isFormValid = name.length>0 || price > 0 || description.length>0 || stock > 0 || threshold > 0;
+  
+  if(loading) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
+  
   return (
     <Fragment>
       <MetaData title="Update Product" />
-      <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+      <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
         <SideBar />
         <div className="md:col-span-4 border-l border-gray-200 bg-gray-100 p-8 min-h-screen">
           <form
@@ -39,7 +61,6 @@ const UpdateProduct = ({ history }) => {
               <input
                 type="text"
                 placeholder="Product Name"
-                required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
@@ -51,7 +72,6 @@ const UpdateProduct = ({ history }) => {
               <input
                 type="number"
                 placeholder="Price"
-                required
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
@@ -74,9 +94,19 @@ const UpdateProduct = ({ history }) => {
               <input
                 type="number"
                 placeholder="Stock"
-                required
-                value={Stock}
+                value={stock}
                 onChange={(e) => setStock(e.target.value)}
+                className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
+              />
+            </div>
+
+            <div className="w-full relative flex items-center mb-4">
+              <DataThresholding className="absolute left-4 text-gray-600" />
+              <input
+                type="number"
+                placeholder="Threshold"
+                value={threshold}
+                onChange={(e) => setThreshold(e.target.value)}
                 className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
               />
             </div>
@@ -85,6 +115,7 @@ const UpdateProduct = ({ history }) => {
               type="submit"
               variant="contained"
               color="primary"
+              disabled={loading || !isFormValid}
               className="w-full bg-tomato hover:bg-red-600 text-white font-semibold py-2 rounded-md transition duration-500"
             >
               Update
@@ -97,14 +128,3 @@ const UpdateProduct = ({ history }) => {
 };
 
 export default UpdateProduct;
-
-
-// import React from 'react'
-
-// const UpdateProduct = () => {
-//   return (
-//     <div>UpdateProduct</div>
-//   )
-// }
-
-// export default UpdateProduct

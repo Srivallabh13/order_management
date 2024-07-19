@@ -9,42 +9,37 @@ import SideBar from "./Sidebar";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteProduct, getProducts } from "../../Actions/ProductActions";
+import { Box, LinearProgress } from "@mui/material";
 
 const ProductList = ({ history }) => {
   const productsData = useSelector((state)=>state.products.products);
+  const {loading} = useSelector((state)=>state.products);
   const dispatch = useDispatch();
   useEffect(()=>{
     dispatch(getProducts());
   },[dispatch])
   const [products, setProducts] = useState(productsData);
+  const [load, setLoad] = useState(false);
   const alert = useAlert();
 
   const deleteProductHandler = (id) => {
+    setLoad(true);
     const updatedProducts = products.filter((product) => product.id !== id);
     setProducts(updatedProducts);
     dispatch(DeleteProduct(id));
     alert.success("Product Deleted Successfully");
+    setLoad(false);
   };
   useEffect(() => {
-    // Assuming productsData is an array of products fetched from the backend
     if (productsData) {
       const productsWithId = productsData.map((product, index) => ({
         ...product,
-        id: product.productID || index, // Use productID as id or fallback to index
+        id: product.productID || index,
       }));
       setProducts(productsWithId);
     }
   }, [productsData]);
 
-
-  useEffect(() => {
-    // Example: Fetching data from an API endpoint
-    // Replace with your actual data fetching logic
-    // fetchProducts()
-    //   .then(data => setProducts(data))
-    //   .catch(error => alert.error(error.message));
-  }, [alert]);
-  console.log(products);
   const columns = [
     { field: "productID", headerName: "Product ID", maxWidth: 100, flex: 1 },
     { field: "productName", headerName: "Name", minWidth: 200, flex: 1 },
@@ -69,9 +64,14 @@ const ProductList = ({ history }) => {
       ),
     },
   ];
+  if(loading || load) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
 
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <MetaData title="Product List - Admin Panel" />
       <SideBar className="md:col-span-1" />
 

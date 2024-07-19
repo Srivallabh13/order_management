@@ -1,4 +1,4 @@
-import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL} from '../Constants/ProductConstants'
+import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL, UPDATE_PRODUCT_FAIL, UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_REQUEST} from '../Constants/ProductConstants'
 
 export const ProductReducer = (state = {products:[]}, action) => {
     switch (action.type) {
@@ -96,6 +96,34 @@ export const DeleteProductReducer = (state = {product:{}}, action) => {
                 product:action.payload,
             };
         case DELETE_PRODUCT_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const UpdateProductReducer = (state = {message:{}}, action) => {
+    switch (action.type) {
+        case UPDATE_PRODUCT_REQUEST:
+            return {
+                loading:true,
+                message:null
+            };
+        case UPDATE_PRODUCT_SUCCESS:
+            return {
+                loading:false,
+                message:action.payload,
+            };
+        case UPDATE_PRODUCT_FAIL:
             return {
                 loading:false,
                 error: action.payload

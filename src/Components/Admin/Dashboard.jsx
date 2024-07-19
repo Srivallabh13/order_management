@@ -14,7 +14,7 @@ import {
 } from "chart.js";
 import { Doughnut, Line } from "react-chartjs-2";
 import MetaData from "../MetaData";
-import { Typography } from "@mui/material";
+import { Box, LinearProgress, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { getProducts } from "../../Actions/ProductActions";
 import { AllUsers } from "../../Actions/UserActions";
@@ -35,9 +35,9 @@ ChartJS.register(
 const Dashboard = () => {
   // Static values for demonstration
   const dispatch = useDispatch();
-  const { products } = useSelector((state)=>state.products);
-  const {orders} = useSelector((state)=>state.allOrders);
-  const {users} = useSelector((state)=>state.allUsers);
+  const { products,loading } = useSelector((state)=>state.products);
+  const {orders, loading:loadingOrders} = useSelector((state)=>state.allOrders);
+  const {users, loading:loadingUsers} = useSelector((state)=>state.allUsers);
 
   useEffect(()=> {
     dispatch(getProducts());
@@ -81,9 +81,14 @@ const Dashboard = () => {
       },
     ],
   };
+  if(loading||loadingOrders||loadingUsers) {
+    return  <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+    <LinearProgress color='secondary' />
+  </Box>
+  }
 
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <MetaData title="Dashboard - Admin Panel" />
       <Sidebar />
 

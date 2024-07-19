@@ -3,7 +3,7 @@ import MetaData from "../MetaData";
 import SideBar from './Sidebar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, LinearProgress } from "@mui/material";
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
 import { AllUsers, DeleteUser, UpdateRole } from "../../Actions/UserActions";
@@ -12,12 +12,14 @@ import VerifiedUserIcon from "@mui/icons-material/VerifiedUser";
 
 
 const UsersList = ({ history }) => {
+  const {loading} = useSelector((state) => state.allUsers);
   const allUsers = useSelector((state) => state.allUsers.users);
   const dispatch = useDispatch();
   const {user} = useSelector((state)=>state.currentUser);
   const [users, setUsers] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [role, setRole] = useState(user.role);
+  const [load, setLoad] = useState(false);
   const [editUserId, setEditUserId] = useState();
 
   const handleClickOpen = (id) => {
@@ -41,14 +43,17 @@ const UsersList = ({ history }) => {
   }, [allUsers]);
 
   const deleteUserHandler = (id) => {
+    setLoad(true);
     dispatch(DeleteUser(id))
-      .then(() => {
-        setUsers(users.filter(user => user._id !== id));
-        dispatch(AllUsers());
-        alert.success("User Deleted Successfully");
-      })
-      .catch(error => {
-        alert.error("Failed to delete user: " + error.message);
+    .then(() => {
+      setUsers(users.filter(user => user._id !== id));
+      dispatch(AllUsers());
+      alert.success("User Deleted Successfully");
+      setLoad(false);
+    })
+    .catch(error => {
+      alert.error("Failed to delete user: " + error.message);
+      setLoad(false);
       });
   };
 
@@ -100,8 +105,14 @@ const UsersList = ({ history }) => {
     fullName: user.fullName,
   }));
 
+  if(loading || load) {
+    return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>
+    }
+
   return (
-    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5 absolute">
+    <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
       <SideBar className="w-1/5" />
       <div className="md:col-span-4 border-l border-gray-200 bg-white p-6 overflow-auto">
         <MetaData title="ALL USERS - Admin Panel" />
@@ -124,11 +135,18 @@ const UsersList = ({ history }) => {
         PaperProps={{
           component: 'form',
           onSubmit: (event) => {
+            setLoad(true);
             event.preventDefault();
-            dispatch(UpdateRole(editUserId, role));
-            alert.success("User is successfully an admin");
-            console.log(role);
-            handleClose();
+            dispatch(UpdateRole(editUserId, role)).then(() => {
+              dispatch(AllUsers());
+              alert.success(`User is successfully an ${role}`);
+              handleClose();
+              setLoad(false);
+            })
+            .catch(error => {
+              alert.error("Failed to update role: " + error.message);
+              setLoad(false);
+            });
           },
         }}
       >
