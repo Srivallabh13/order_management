@@ -1,26 +1,38 @@
-import { Typography } from '@mui/material'
+import { Box, LinearProgress, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { RegisterUser } from '../Actions/UserActions'
+import { useAlert } from 'react-alert'
 
 const Register = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [fullName, setFullName] = useState("")
   const [username, setUsername] = useState("")
+  const [loading, setLoading] = useState(false)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const alert = useAlert();
 
   const handleSubmit = async(e)=> {
+    setLoading(true);
     e.preventDefault()
-    
     const formData = new FormData();
     formData.append('FullName', fullName);
     formData.append('Email', email);
     formData.append('Password', password); 
     formData.append("Username", username);
     dispatch(RegisterUser(formData));
-    window.location.href = '/';
+    alert.success("Registration Successfull");
+    setLoading(false);
+    navigate('/login');
+  }
+
+  if(loading) {
+    <Box sx={{ width: '100%' }}>
+      <LinearProgress color='secondary' />
+    </Box>
   }
 
   return (

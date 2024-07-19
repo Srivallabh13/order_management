@@ -1,4 +1,5 @@
-import { USER_REQUEST, USER_SUCCESS, USER_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL, REGISTER_REQUEST, CLEAR_ERRORS, USERS_ORDER_REQUEST, USERS_ORDER_SUCCESS, USERS_ORDER_FAIL, USERS_BY_ID_FAIL, USERS_BY_ID_SUCCESS, USERS_BY_ID_REQUEST } from "../Constants/UserConstants";
+import { ALL_ORDER_FAIL } from "../Constants/OrderConstants";
+import { USER_REQUEST, USER_SUCCESS, USER_FAIL, LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAIL, REGISTER_SUCCESS, REGISTER_FAIL, REGISTER_REQUEST, CLEAR_ERRORS, USERS_ORDER_REQUEST, USERS_ORDER_SUCCESS, USERS_ORDER_FAIL, USERS_BY_ID_FAIL, USERS_BY_ID_SUCCESS, USERS_BY_ID_REQUEST, ALL_USERS_REQUEST, ALL_USERS_SUCCESS, DELETE_USER_REQUEST, DELETE_USER_SUCCESS, DELETE_USER_FAIL, UPDATE_USER_SUCCESS, UPDATE_USER_REQUEST, UPDATE_USER_FAIL, UPDATE_PASSWORD_REQUEST, UPDATE_PASSWORD_SUCCESS, UPDATE_PASSWORD_FAIL, UPDATE_ROLE_FAIL, UPDATE_ROLE_SUCCESS, UPDATE_ROLE_REQUEST } from "../Constants/UserConstants";
 
 export const UserReducer = (state = {user:null}, action) => {
     switch (action.type) {
@@ -83,6 +84,84 @@ export const RegisterReducer = (state = {user:null}, action) => {
             return state;
     }
 };
+export const DeleteUserReducer = (state = {user:{}}, action) => {
+    switch (action.type) {
+        case DELETE_USER_REQUEST:
+            return {
+                loading:true,
+                user:{}
+            };
+        case DELETE_USER_SUCCESS:
+            return {
+                loading:false,
+                user:action.payload,
+            };
+        case DELETE_USER_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const UpdateUserReducer = (state = {user:{}}, action) => {
+    switch (action.type) {
+        case UPDATE_USER_REQUEST:
+            return {
+                loading:true,
+                user:{}
+            };
+        case UPDATE_USER_SUCCESS:
+            return {
+                loading:false,
+                user:action.payload,
+            };
+        case UPDATE_USER_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const updatePasswordReducer = (state = {}, action) => {
+    switch (action.type) {
+      case UPDATE_PASSWORD_REQUEST:
+        return {
+             loading: true 
+        };
+      case UPDATE_PASSWORD_SUCCESS:
+        return {
+            loading: false,
+            success: true,
+            message: action.payload 
+        };
+      case UPDATE_PASSWORD_FAIL:
+        return {
+            loading: false,
+            error: action.payload
+        };
+   
+      default:
+        return state;
+    }
+  };  
 
 
 export const UserOrdersReducer = (state = {orders:[]}, action) => {
@@ -112,6 +191,33 @@ export const UserOrdersReducer = (state = {orders:[]}, action) => {
             return state;
     }
 };
+export const AllUsersReducer = (state = {users:[]}, action) => {
+    switch (action.type) {
+        case ALL_USERS_REQUEST:
+            return {
+                loading:true,
+                users:[]
+            };
+        case ALL_USERS_SUCCESS:
+            return {
+                loading:false,
+                users:action.payload,
+            };
+        case ALL_ORDER_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
 
 
 export const UserByIdReducer = (state = {user:{}}, action) => {
@@ -127,6 +233,34 @@ export const UserByIdReducer = (state = {user:{}}, action) => {
                 user:action.payload,
             };
         case USERS_BY_ID_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const UpdateRoleReducer = (state = {user:{}}, action) => {
+    switch (action.type) {
+        case UPDATE_ROLE_REQUEST:
+            return {
+                loading:true,
+                user:null
+            };
+        case UPDATE_ROLE_SUCCESS:
+            return {
+                loading:false,
+                user:action.payload,
+            };
+        case UPDATE_ROLE_FAIL:
             return {
                 loading:false,
                 error: action.payload

@@ -1,5 +1,5 @@
-import { Card, Divider, Stack, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Box, Card, Divider, LinearProgress, Stack, Typography } from "@mui/material";
+import React, { useEffect } from "react";
 import OrderProductCard from "../Utils/OrderProductCard";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -9,7 +9,7 @@ import { getUserById } from "../Actions/UserActions";
 const OrderDetails = () => {
   const { id } = useParams();
 
-  const { order } = useSelector((state) => state.orderById);
+  const { order, loading } = useSelector((state) => state.orderById);
   const { user } = useSelector((state) => state.userById);
   const currentUser = useSelector((state) => state.currentUser.user);
 
@@ -20,10 +20,15 @@ const OrderDetails = () => {
 
   useEffect(() => {
     dispatch(getUserById(currentUser.id));
-  }, [dispatch]);
+  }, [dispatch,currentUser.id]);
+  
+  if(loading){
+    return <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+    <LinearProgress color='secondary' />
+  </Box>
+  }
   return (
     <div className="mx-72 mt-2 h-full">
-      {/* {console.log(order, user)} */}
       <Typography variant="h4" pt={3} fontWeight={600}>
         Order Details
       </Typography>
