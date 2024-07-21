@@ -38,6 +38,7 @@ const Dashboard = () => {
   const { products,loading } = useSelector((state)=>state.products);
   const {orders, loading:loadingOrders} = useSelector((state)=>state.allOrders);
   const {users, loading:loadingUsers} = useSelector((state)=>state.allUsers);
+  let outOfStock = products.filter((product)=>product.stockLevel === 0)?.length;
 
   useEffect(()=> {
     dispatch(getProducts());
@@ -45,17 +46,8 @@ const Dashboard = () => {
     dispatch(AllOrder());
   },[dispatch])
 
-
-  let outOfStock = 0;
-
-  products.forEach((item) => {
-    if (item.Stock === 0) {
-      outOfStock += 1;
-    }
-  });
-
   let totalAmount = 0;
-  orders.forEach((item) => {
+  orders?.forEach((item) => {
     totalAmount += item.price;
   });
 
@@ -77,7 +69,7 @@ const Dashboard = () => {
       {
         backgroundColor: ["#00A6B4", "#6800B4"],
         hoverBackgroundColor: ["blue", "#35014F"],
-        data: [outOfStock, products.length - outOfStock],
+        data: [outOfStock, products?.length - outOfStock],
       },
     ],
   };
@@ -99,22 +91,22 @@ const Dashboard = () => {
 
         <div className="my-8">
           <div className="flex bg-white justify-center">
-            <p className="bg-blue-500 text-white font-light text-lg text-center p-2 w-full mx-20">
-              Total Amount <br /> ₹{totalAmount}
-            </p>
+            <Typography variant="h5" className="bg-blue-500 text-white font-light text-lg text-center p-2 w-full mx-20">
+              Total Sales <br /><span className="font-extrabold"> ₹{totalAmount}</span>
+            </Typography>
           </div>
           <div className="flex justify-center items-center my-8">
             <Link to="/admin/products" className="text-black font-light text-2xl text-center bg-red-500 no-underline p-6 w-40 h-40 m-8 rounded-full flex justify-center items-center flex-col">
               <p>Product</p>
-              <p>{products.length}</p>
+              <p>{products?.length}</p>
             </Link>
             <Link to="/admin/orders" className="text-black font-light text-2xl text-center bg-amber-300 no-underline p-6 w-40 h-40 m-8 rounded-full flex justify-center items-center flex-col">
               <p>Orders</p>
-              <p>{orders.length}</p>
+              <p>{orders?.length}</p>
             </Link>
             <Link to="/admin/users" className="text-white font-light text-2xl text-center bg-gray-800 no-underline p-6 w-40 h-40 m-8 rounded-full flex justify-center items-center flex-col">
               <p>Users</p>
-              <p>{users.length}</p>
+              <p>{users?.length}</p>
             </Link>
           </div>
         </div>

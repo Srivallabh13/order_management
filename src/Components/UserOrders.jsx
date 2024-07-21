@@ -13,6 +13,7 @@ const UserOrders = () => {
   }, [dispatch,user.id])
 
   const { orders, loading } = useSelector((state)=>state.userOrders);
+  orders?.reverse();
 
   if(loading) {
     return <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>

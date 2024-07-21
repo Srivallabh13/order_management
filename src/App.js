@@ -30,6 +30,11 @@ import PageNotFound from './Utils/PageNotFound';
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
   const { user, loading } = useSelector((state)=>state.currentUser);
+  const token = user?.token;
+  if(token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
   const dispatch = useDispatch();
 
   useEffect(() => {

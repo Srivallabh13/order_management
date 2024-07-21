@@ -12,8 +12,7 @@ import { useAlert } from "react-alert";
 
 const ProcessOrder = () => {
   const {id} = useParams();
-  const userData = useSelector((state)=>state.userById.user);
-  const load = useSelector((state)=>state.userById.loading);
+  const {user:userData, loading:load} = useSelector((state)=>state.userById);
   const {order, loading} = useSelector((state)=>state.orderById);
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -27,18 +26,23 @@ const ProcessOrder = () => {
   }, [dispatch, order?.custId])
 
   const [status, setStatus] = useState("");
+  const [loadingState, setLoadingState] = useState(false);
 
   const updateOrderSubmitHandler = (e) => {
+    setLoadingState(true);
     e.preventDefault();
     dispatch(UpdateOrderStatus(id, status)).then(() => {
       dispatch(OrderById(id));
       alert.success("Order Updated Successfully");
+      setLoadingState(false);
+      setStatus("");
     })
     .catch(error => {
       alert.error("Failed to update status: " + error.message);
+      setLoadingState(false);
     });
   };
-  if(loading || load) {
+  if(loading || load ) {
     return   <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
       <LinearProgress color='secondary' />
     </Box>
@@ -46,6 +50,9 @@ const ProcessOrder = () => {
 
   return (
     <div className="w-screen max-w-full grid grid-cols-1 md:grid-cols-5">
+      {loadingState && <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+      <LinearProgress color='secondary' />
+    </Box>}
       <MetaData title="Process Order" />
       <SideBar className="md:col-span-1" />
       <div className="md:col-span-3 border-l border-gray-200 bg-white p-6 pr-0 overflow-auto">
@@ -140,7 +147,7 @@ const ProcessOrder = () => {
             <Button
               id="createProductBtn"
               type="submit"
-              disabled={!status}
+              disabled={!status || loadingState || status?.length === 0}
               className="w-full bg-blue-500 hover:bg-red-600 text-white font-semibold py-2 rounded-md transition duration-500"
             >
               Process
