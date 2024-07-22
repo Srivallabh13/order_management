@@ -12,7 +12,9 @@ const OrderedProduct = ({order, user}) => {
             <Stack direction={'row'} flex={2} justifyContent={'space-between'}>
                 <Stack direction={'column'}>
                     <Typography variant='overline'>Order Placed</Typography>
-                    <Typography fontWeight={600} variant='subtitle2'>{order.date.substring(0, 10)}</Typography>
+                    <Typography fontWeight={600} variant='subtitle2'>
+                            {order?.date ? order.date.substring(0, 10) : 'N/A'}
+                        </Typography>
                 </Stack>
                 <Stack direction={'column'}>
                     <Typography variant='overline'>Total</Typography>
