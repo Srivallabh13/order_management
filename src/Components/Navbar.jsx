@@ -7,6 +7,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Home } from '@mui/icons-material';
 import { Badge, Typography } from '@mui/material';
+import Login from './Login';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const Navbar = () => {
     navigate('/', { replace: true });
   };
 
-  const { user } = useSelector((state) => state.currentUser);
+  const { user, loading } = useSelector((state) => state.currentUser);
   const { products } = useSelector((state) => state.cart);
 
   return (
@@ -28,19 +29,32 @@ const Navbar = () => {
         <span className='text-lg font-semibold'>ORDER MANAGEMENT SYSTEM</span>
       </Link>
       <ul className="flex flex-row gap-4 md:gap-12">
-      {user && user?.role === 'admin' &&
+      {user && loading ===false && user?.role === 'admin' &&
             <Link to={'/admin/dashboard'}>
               <li>
                 <Typography>Admin panel</Typography>
               </li>
             </Link>
-            }
-        <Link to={'/'}>
-          <li><Home /></li>
-        </Link>
+      }
+        {!user && loading ===false&&
+        <>
+          <Link to={'/'}>
+            <li><Home /></li>
+          </Link>
+          <Link to={'/login'}>
+            <li>Login</li>
+          </Link>
+          <Link to={'/register'}>
+            <li>Register</li>
+          </Link>
+        </>
+        }
         
-        {user && 
+        {user && loading === false && 
           <>
+            <Link to={'/'}>
+              <li><Home /></li>
+            </Link>
             <Link to={'/cart'}>
               <li>
                 <Badge badgeContent={products?.length || 0} color="primary">

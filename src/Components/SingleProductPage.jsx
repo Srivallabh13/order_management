@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import logo from "../assets/Images/iphone12.jpg";
-import { Box, Divider, Fab, LinearProgress, Stack, Typography } from '@mui/material';
+import { Box, Button, Divider, Fab, LinearProgress, Stack, Typography } from '@mui/material';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -8,9 +8,10 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { AddToCart } from '../Actions/ProductActions';
+import { AddToCart, CheckInventory, IsAvailable } from '../Actions/ProductActions';
 import { getUserById } from '../Actions/UserActions';
 import { useAlert } from 'react-alert';
+import { CreateOrder } from '../Actions/OrderAction';
 
 const SingleProductPage = () => {
   const [quantity, setQuantity] = useState(1);
@@ -20,9 +21,12 @@ const SingleProductPage = () => {
   const dispatch = useDispatch();
 
   const {user} = useSelector((state)=>state.currentUser);
-  const userDetails = useSelector((state)=>state.userById.user);
+  const { loading:loadingStatus} = useSelector((state)=>state.outOfStock);
+  const {isAvailable, loading:loadingAvailability} = useSelector((state)=>state.IsAvailable);
+  const {user:userDetails, loading:loadingUser} = useSelector((state)=>state.userById);
   const { id } = useParams();
   const alert = useAlert();
+
   useEffect(()=>{
     dispatch(getUserById(user?.id));
   }, [dispatch, user?.id])
@@ -32,25 +36,35 @@ const SingleProductPage = () => {
       alert.info("Successfully added to cart");
   };
   
+  useEffect(()=> {
+    dispatch(IsAvailable({prodId:parseInt(id), quantity}));
+  },[dispatch, id, quantity])
 
   const handleBuyNow = async (product, quantity) => {
     try {
       setLoading(true);
+
       const orderData = {
         products: [{ id: product.productID, quantity }],
-        custId: user.id, // Replace with actual customer ID
+        custId: user.id,
         price: product.price * quantity,
       };
-      const response = await axios.post('Order/create', orderData);
+      const products = [{prodId:product.productID, quantity}];
+      await dispatch(CheckInventory(products));
+      await dispatch(CreateOrder(orderData)).then(()=>{
+          navigate('/orderSuccess');
+          alert.success("Order created successfully!");
+        })
+        .catch(error => {
+          alert.error("Failed to create order: " + error.message);
+          });
       setLoading(false);
-      navigate('/orderSuccess');
-      alert.success("Order created successfully!");
-    } catch (error) {
+    }
+     catch (error) {
       setLoading(false);
       console.error('Error creating order:', error);
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,20 +74,25 @@ const SingleProductPage = () => {
         setLoading(false);
       } catch (error) {
         console.error('Error fetching product:', error);
-        setLoading(false); // Handle error state as needed
+        setLoading(false);
       }
     };
 
     fetchData();
   }, [id]);
-
+  if(loadingUser  || loadingStatus || loadingAvailability) {
+    return <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+    <LinearProgress color='secondary' />
+  </Box>
+  }
   return (
     <Stack direction={'row'} className='h-[87%] p-10' gap={3}>
-      {loading && (
+      {loading && 
         <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
-          <LinearProgress color='secondary' />
-        </Box>
-      )}
+            <LinearProgress color='secondary' />
+         </Box>
+      }
+
       <Box className='flex w-[40%]'>
         <Box className='w-full h-[90%] my-auto' style={{ backgroundImage: `url(${logo})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '10px' }}>
         </Box>
@@ -97,7 +116,7 @@ const SingleProductPage = () => {
             <Box className='flex gap-1 flex-row items-center mb-3'>
               <Fab  size='small' disabled={quantity <= 1 || loading} onClick={() => setQuantity(quantity - 1)} className='bg-gray-200 py-1 px-1 rounded-lg'>-</Fab>
               <Typography className='py-2 px-3 rounded-lg'>{quantity}</Typography>
-              <Fab size='small' disabled={quantity >= 5 || loading} onClick={() => setQuantity(quantity + 1)} className='bg-gray-200 py-1 px-1 rounded-lg'>+</Fab>
+              <Fab size='small' disabled={quantity >= 5 || loading ||!isAvailable} onClick={() => setQuantity(quantity + 1)} className='bg-gray-200 py-1 px-1 rounded-lg'>+</Fab>
             </Box>
 
             <Divider className='bg-slate-400' />
@@ -129,12 +148,12 @@ const SingleProductPage = () => {
       <Stack className='w-[30%] p-5'>
         <Box mb={2}>
           <Typography variant='body2' fontWeight={350}>
-            FREE delivery <span style={{ fontWeight: 'bold' }}>Friday, 12 July.</span>
+            FREE delivery <span style={{ fontWeight: 'bold' }}>Sunday, 21 July.</span>
           </Typography>
         </Box>
         <Box mb={3}>
           <Typography variant='body2' fontWeight={350}>
-            Or fastest delivery <span style={{ fontWeight: 'bold' }}>Tomorrow, 11 July</span>. Order within <span style={{ color: 'green', fontWeight: 'bold' }}>13 hrs</span>.
+            Or fastest delivery <span style={{ fontWeight: 'bold' }}>Sunday, 21 July</span>. Order within <span style={{ color: 'green', fontWeight: 'bold' }}>13 hrs</span>.
           </Typography>
         </Box>
 
@@ -146,12 +165,20 @@ const SingleProductPage = () => {
         </Box>
 
         <Box>
-          <Typography variant='body2' fontSize={20} mb={4} color={'green'}>
-            In Stock
-          </Typography>
-        </Box>
-          <button disabled={loading} onClick={()=> handleBuyNow(product, quantity)} className='w-full py-1 bg-blue-900 text-white rounded-lg hover:bg-blue-800 p-2 mb-3'>Buy Now</button>
-          <button disabled={loading} onClick={() => handleAddToCart(product, quantity)} className='w-full py-1 bg-sky-700 text-white rounded-lg hover:bg-sky-600 p-2'>Add To Cart</button>
+          {isAvailable ?
+            <Typography variant='body2' fontSize={20} mb={4} color={'green'}>
+              In Stock
+            </Typography>
+          :
+            <Typography variant='body2' fontSize={20} mb={4} color={'red'}>
+              Out of Stock
+            </Typography>
+          }
+        </Box >
+        <Stack direction={'column'} gap={2}>
+          <Button variant='contained' disabled={loading || !isAvailable} onClick={()=> handleBuyNow(product, quantity)} className='w-full  '>Buy Now</Button>
+          <Button variant='contained' disabled={loading || !isAvailable} onClick={() => handleAddToCart(product, quantity)} className='w-full '>Add To Cart</Button>
+        </Stack>
       </Stack>
     </Stack>
   );

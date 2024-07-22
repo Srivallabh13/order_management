@@ -8,7 +8,7 @@ export const getUser = () => async(dispatch)=> {
             type:USER_REQUEST
         })
         var token = localStorage.getItem('jwt');
-        console.log(token);
+        // console.log(token);
         if(token!=null) {
             const { data } = await axios.get('/Account', {
                 headers: {
@@ -53,10 +53,14 @@ export const LoginUser = (formData) => async(dispatch)=> {
         })
         dispatch(getUser());
     } catch (error) {
-        dispatch({
-            type:LOGIN_FAIL,
-            payload: error
-        }) 
+        const errorMessage = error.response && error.response.data.message 
+            ? error.response.data.message 
+            : error.message;
+            dispatch({
+                type:LOGIN_FAIL,
+                payload: errorMessage
+            }) 
+            throw error;
     }
 }
 

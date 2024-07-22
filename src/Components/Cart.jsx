@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import CartProductCard from './CartProductCard'
 import { useDispatch, useSelector } from 'react-redux'
 import axios from 'axios'
-import { clearState, UpdateCart } from '../Actions/ProductActions'
+import { CheckInventory, clearState, UpdateCart } from '../Actions/ProductActions'
 import { useNavigate } from 'react-router-dom'; 
 import { useAlert } from 'react-alert'
 
@@ -13,16 +13,20 @@ const Cart = () => {
   const alert = useAlert();
 
   const {products} = useSelector((state)=>state.cart);
+  const {outOfStockProducts, loading:loadingStock} = useSelector((state)=>state.outOfStock);
   const {user} = useSelector((state)=>state.currentUser)
   const dispatch = useDispatch();
   const navigate = useNavigate();  
+
   const handleCheckout = async (products) => {
     try {
       setLoading(true);
       let cartProducts = [];
+      let productsInCart = [];
       let total = 0;
       products && products.forEach((product)=>{
         cartProducts = [...cartProducts, { id: product.productID, quantity: product.quantity }];
+        productsInCart = [...productsInCart, { prodId: product.productID, quantity: product.quantity }];
         total += product.quantity*product.price;
       })
       console.log(user);
@@ -31,12 +35,19 @@ const Cart = () => {
         custId: user.id, // Replace with actual customer ID
         price: total
       };
-      await axios.post('Order/create', orderData);
-      sessionStorage.removeItem('cart');
-      dispatch(clearState());
-      setLoading(false);
-      navigate('/orderSuccess');  
-      alert.success("Order is successfully created!");
+      await dispatch(CheckInventory(productsInCart)).then(()=> {
+        if(outOfStockProducts?.length > 0) {
+          alert.error("One of the products in cart is currently unavailable");
+        }
+        else {
+          axios.post('Order/create', orderData);
+          sessionStorage.removeItem('cart');
+          dispatch(clearState());
+          setLoading(false);
+          navigate('/orderSuccess');  
+          alert.success("Order is successfully created!");
+        }
+      })
     } catch (error) {
       console.error('Error creating order:', error);
       setLoading(false);
