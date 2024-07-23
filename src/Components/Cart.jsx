@@ -2,10 +2,11 @@ import { Box, Button, Card, Divider, LinearProgress, Stack, Typography } from '@
 import React, { useEffect, useState } from 'react'
 import CartProductCard from './CartProductCard'
 import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
-import { CheckInventory, clearState, UpdateCart } from '../Actions/ProductActions'
+import { CheckInventory, clearCart, UpdateCart } from '../Actions/ProductActions'
 import { useNavigate } from 'react-router-dom'; 
 import { useAlert } from 'react-alert'
+import { CreateOrder } from '../Actions/OrderAction'
+import axios from 'axios'
 
 const Cart = () => {
   const [amount, setAmount] = useState(0);
@@ -13,7 +14,6 @@ const Cart = () => {
   const alert = useAlert();
 
   const {products} = useSelector((state)=>state.cart);
-  const {outOfStockProducts, loading:loadingStock} = useSelector((state)=>state.outOfStock);
   const {user} = useSelector((state)=>state.currentUser)
   const dispatch = useDispatch();
   const navigate = useNavigate();  
@@ -24,36 +24,43 @@ const Cart = () => {
       let cartProducts = [];
       let productsInCart = [];
       let total = 0;
-      products && products.forEach((product)=>{
-        cartProducts = [...cartProducts, { id: product.productID, quantity: product.quantity }];
-        productsInCart = [...productsInCart, { prodId: product.productID, quantity: product.quantity }];
-        total += product.quantity*product.price;
-      })
-      console.log(user);
+  
+      for (const product of products) {
+          cartProducts = [...cartProducts, { id: product.productID, quantity: product.quantity }];
+          productsInCart = [...productsInCart, { prodId: product.productID, quantity: product.quantity }];
+          total += product.quantity * product.price;
+      }
+
       const orderData = {
         products: cartProducts,
-        custId: user.id, // Replace with actual customer ID
+        custId: user.id, 
         price: total
       };
-      await dispatch(CheckInventory(productsInCart)).then(()=> {
-        if(outOfStockProducts?.length > 0) {
-          alert.error("One of the products in cart is currently unavailable");
-        }
-        else {
-          axios.post('Order/create', orderData);
+  
+      const result = await dispatch(CheckInventory(productsInCart));
+      console.log(result);
+      if(result?.length === 0) {
+          await axios.post('Order/create', orderData);
+          // await dispatch(CreateOrder(orderData))
           sessionStorage.removeItem('cart');
-          dispatch(clearState());
-          setLoading(false);
+          dispatch(clearCart());
           navigate('/orderSuccess');  
           alert.success("Order is successfully created!");
+          setLoading(false);
         }
-      })
+        else {
+          alert.error(`Products with id: ${result.map((item)=>item)} are currently unavailable`);
+          setLoading(false);
+          return;
+        }
+      // });
+  
     } catch (error) {
       console.error('Error creating order:', error);
       setLoading(false);
     }
   };
-
+  
   const handleQuantityChange = (productID, quantity) => {
     dispatch(UpdateCart(productID, quantity));
   };
@@ -68,7 +75,7 @@ const Cart = () => {
 
   return (
     <Box className='w-full flex py-10 px-24 gap-6'>
-      {loading && (
+      {loading &&  (
         <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
           <LinearProgress color='secondary' />
         </Box>

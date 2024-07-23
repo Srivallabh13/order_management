@@ -59,6 +59,8 @@ export const CheckInventory = (products) => async(dispatch)=> {
             type:INVENTORY_SUCCESS,
             payload: data
         })
+        return data;
+
     } catch (error) {
         dispatch({
             type:INVENTORY_FAIL,
@@ -118,7 +120,7 @@ export const clearErrors = () => async(dispatch)=> {
     })
 }
 
-export const clearState = () => async(dispatch)=> {
+export const clearCart = () => async(dispatch)=> {
     dispatch({
         type:CLEAR_CART_STATE
     })
