@@ -52,9 +52,9 @@ const Login = () => {
       {error && <p className='text-red-500'>{error}</p>}
         <div className='flex-col w-64 h-full space-y-3'>
           <p className='text-3xl '>Login</p>
-          <label className='block' htmlFor='email'>Email*</label>
+          <label className='block' htmlFor='email'>Email<span className="text-red-500">*</span></label>
           <input value={email} onChange={(e) => setEmail(e.target.value)} className='border w-full p border-black rounded-lg p-3' required type="email" placeholder='john@gmail.com' />
-          <label htmlFor='password'>Password*</label>
+          <label htmlFor='password'>Password<span className="text-red-500">*</span></label>
           <input value={password} onChange={(e) => setPassword(e.target.value)} className='border w-full border-black rounded-lg p-3' required type="password" placeholder='******' />
           <button disabled={loading} className='p-3 rounded-md w-full bg-purple-400'>Submit</button>
         </div>

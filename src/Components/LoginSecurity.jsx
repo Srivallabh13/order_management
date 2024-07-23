@@ -40,7 +40,11 @@ const LoginSecurity = () => {
         alert.error('New passwords do not match');
         return;
       }
-
+      if(passwords.newPassword === passwords.currentPassword) {
+              alert.error("New password and current cannot be same.");
+              return;
+            }
+       
       const formData = new FormData();
       formData.append("currentPassword", passwords.currentPassword);
       formData.append("newPassword", passwords.newPassword);
