@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { CheckInventory, clearCart, UpdateCart } from '../Actions/ProductActions'
 import { useNavigate } from 'react-router-dom'; 
 import { useAlert } from 'react-alert'
-import { CreateOrder } from '../Actions/OrderAction'
 import axios from 'axios'
 
 const Cart = () => {

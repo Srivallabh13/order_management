@@ -70,20 +70,26 @@ export const RegisterUser = (formData) => async(dispatch)=> {
             type:REGISTER_REQUEST
         })
 
+        
         const {data} = await axios.post('/Account/register', formData, {
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
         });
+        localStorage.setItem('jwt', data.token);
+        
         dispatch({
             type:REGISTER_SUCCESS,
             payload: data
         })
+        return data;
     } catch (error) {
         dispatch({
             type:REGISTER_FAIL,
             payload: error
         }) 
+        console.log(error)
+        throw error;
     }
 }
 

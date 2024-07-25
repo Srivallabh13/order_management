@@ -6,7 +6,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Home } from '@mui/icons-material';
-import { Badge, Typography } from '@mui/material';
+import { Avatar, Badge, Stack, Typography } from '@mui/material';
 import Login from './Login';
 
 const Navbar = () => {
@@ -63,11 +63,11 @@ const Navbar = () => {
               </li>
             </Link>
             <Link to={'/account'}>
-              <li>
-                <AccountCircleIcon /> {user.username}
-              </li>
+            <Stack direction={'row'} spacing={1} alignItems={'center'}>
+                <Avatar sx={{width: 30, height:30}} src={user?.imageUrl}/>
+                <Typography>{user.username}</Typography>
+            </Stack>
             </Link>
-            
             <li>
               <button onClick={handleLogout}><LogoutIcon /></button>
             </li>

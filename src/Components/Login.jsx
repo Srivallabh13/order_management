@@ -30,8 +30,6 @@ const Login = () => {
     } catch (error) {
       setLoading(false);
       if (error.response && error.response.status === 401) {
-        const errorMessage = error.response.data.message || "Incorrect Email or password.";
-        console.log(errorMessage)
         alert.error("Incorrect Email or password");
         setError("Incorrect Email or password.");
       } else {
@@ -49,13 +47,19 @@ const Login = () => {
       )}
 
       <form action="" onSubmit={handleSubmit}>
-      {error && <p className='text-red-500'>{error}</p>}
+
+
         <div className='flex-col w-64 h-full space-y-3'>
           <p className='text-3xl '>Login</p>
           <label className='block' htmlFor='email'>Email*</label>
           <input value={email} onChange={(e) => setEmail(e.target.value)} className='border w-full p border-black rounded-lg p-3' required type="email" placeholder='john@gmail.com' />
           <label htmlFor='password'>Password*</label>
           <input value={password} onChange={(e) => setPassword(e.target.value)} className='border w-full border-black rounded-lg p-3' required type="password" placeholder='******' />
+          {error &&
+          <Box className ="w-full h-fit p-3 border-2 border-red-600 align-middle text-center bg-red-50"> 
+            <Typography variant='subtitle1'>{error}</Typography>
+          </Box>
+          }
           <button disabled={loading} className='p-3 rounded-md w-full bg-purple-400'>Submit</button>
         </div>
         <Typography p={1} variant='subtitle1'> Don't have an account?
