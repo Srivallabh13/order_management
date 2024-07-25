@@ -21,7 +21,7 @@ const OrderedProduct = ({order, user}) => {
                     <Typography fontWeight={600} variant='subtitle2'>{order.price}</Typography>
                 </Stack>
                 <Stack direction={'column'}>
-                    <Typography variant='overline'>shiped to</Typography>
+                    <Typography variant='overline'>shipped to</Typography>
                     <Typography fontWeight={600} variant='subtitle2'>{user.username}</Typography>
                 </Stack>
             </Stack>

@@ -97,7 +97,7 @@ const Dashboard = () => {
           </div>
           <div className="flex justify-center items-center my-8">
             <Link to="/admin/products" className="text-black font-light text-2xl text-center bg-red-500 no-underline p-6 w-40 h-40 m-8 rounded-full flex justify-center items-center flex-col">
-              <p>Product</p>
+              <p>Products</p>
               <p>{products?.length}</p>
             </Link>
             <Link to="/admin/orders" className="text-black font-light text-2xl text-center bg-amber-300 no-underline p-6 w-40 h-40 m-8 rounded-full flex justify-center items-center flex-col">

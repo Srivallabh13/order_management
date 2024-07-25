@@ -1,4 +1,4 @@
-import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL, UPDATE_PRODUCT_FAIL, UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_REQUEST, INVENTORY_SUCCESS, INVENTORY_REQUEST, INVENTORY_FAIL, ISAVAILABLE_REQUEST, ISAVAILABLE_SUCCESS, ISAVAILABLE_FAIL} from '../Constants/ProductConstants'
+import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL, UPDATE_PRODUCT_FAIL, UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_REQUEST, INVENTORY_SUCCESS, INVENTORY_REQUEST, INVENTORY_FAIL, ISAVAILABLE_REQUEST, ISAVAILABLE_SUCCESS, ISAVAILABLE_FAIL, SEARCH_PRODUCT_REQUEST, SEARCH_PRODUCT_SUCCESS, SEARCH_PRODUCT_FAIL} from '../Constants/ProductConstants'
 
 export const ProductReducer = (state = {products:[]}, action) => {
     switch (action.type) {
@@ -13,6 +13,34 @@ export const ProductReducer = (state = {products:[]}, action) => {
                 products:action.payload,
             };
         case ALL_PRODUCT_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const SearchProductReducer = (state = {products:null}, action) => {
+    switch (action.type) {
+        case SEARCH_PRODUCT_REQUEST:
+            return {
+                loading:true,
+                products:null
+            };
+        case SEARCH_PRODUCT_SUCCESS:
+            return {
+                loading:false,
+                products:action.payload,
+            };
+        case SEARCH_PRODUCT_FAIL:
             return {
                 loading:false,
                 error: action.payload

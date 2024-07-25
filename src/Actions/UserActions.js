@@ -117,7 +117,7 @@ export const OrdersByUser = (id) => async(dispatch)=> {
         })
         
         const {data} = await axios.get(`/Order/user/${id}`);
-        
+        console.log(data);
         dispatch({
             type:USERS_ORDER_SUCCESS,
             payload: data.$values
