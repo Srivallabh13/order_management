@@ -155,7 +155,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useAlert } from "react-alert";
 import MetaData from "../MetaData";
 import SideBar from "./Sidebar";
-import { AttachMoney, DataThresholding, Description, Spellcheck, Storage } from "@mui/icons-material";
+import { AttachMoney, DataThresholding, Description, Image, Spellcheck, Storage } from "@mui/icons-material";
 import { Box, Button, LinearProgress, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -171,6 +171,7 @@ const UpdateProduct = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
   const [stock, setStock] = useState(0);
   const [threshold, setThreshold] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -184,6 +185,7 @@ const UpdateProduct = () => {
       setName(productData.productName || "");
       setPrice(productData.price || 0);
       setDescription(productData.description || "");
+      setImageUrl(productData.imageUrl || "");
       setStock(productData.stockLevel || 0);
       setThreshold(productData.threshold || 0);
     }
@@ -198,6 +200,7 @@ const UpdateProduct = () => {
     formData.append("description", description);
     formData.append("stockLevel", stock);
     formData.append("threshold", threshold);
+    formData.append("imageUrl", imageUrl);
     dispatch(updateProduct(id, formData))
       .then(() => {
         alert.success("Product Updated Successfully");
@@ -211,7 +214,7 @@ const UpdateProduct = () => {
       });
   };
 
-  const isFormValid = name.length > 0 && price > 0 && description.length > 0 && stock > 0 && threshold > 0;
+  // const isFormValid = name.length > 0 && price > 0 && description.length > 0 && stock > 0 && threshold > 0 && imageUrl.length>0;
 
   if (loading || loadingProducts) {
     return (
@@ -273,17 +276,6 @@ const UpdateProduct = () => {
             </div>
 
             <div className="w-full relative flex items-center mb-4">
-              <Storage className="absolute left-4 text-gray-600" />
-              <input
-                type="number"
-                placeholder="Stock"
-                value={stock}
-                onChange={(e) => setStock(e.target.value)}
-                className="pl-12 pr-4 text-gray-500 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
-              />
-            </div>
-
-            <div className="w-full relative flex items-center mb-4">
               <DataThresholding className="absolute left-4 text-gray-600" />
               <input
                 type="number"
@@ -294,11 +286,34 @@ const UpdateProduct = () => {
               />
             </div>
 
+            <div className="w-full relative flex items-center mb-4">
+              <Storage className="absolute left-4 text-gray-600" />
+              <input
+                type="number"
+                placeholder="Stock"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                className="pl-12 pr-4 text-gray-500 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
+              />
+            </div>
+
+
+            <div className="w-full relative flex items-center mb-4">
+              <Image className="absolute left-4 text-gray-600" />
+              <input
+                type="url"
+                placeholder="Image Url"
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                className="pl-12 pr-4 text-gray-500 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
+              />
+            </div>
+
             <Button
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading || !isFormValid}
+              disabled={loading}
               className="w-full bg-tomato hover:bg-red-600 text-white font-semibold py-2 rounded-md transition duration-500"
             >
               Update

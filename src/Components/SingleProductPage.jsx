@@ -94,8 +94,9 @@ const SingleProductPage = () => {
       }
 
       <Box className='flex w-[40%]'>
-        <Box className='w-full h-[90%] my-auto' style={{ backgroundImage: `url(${logo})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '10px' }}>
-        </Box>
+        {/* <Box className='w-full h-[90%] my-auto' style={{ backgroundImage: `url(${product?.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '10px' }}>
+        </Box> */}
+        <img src={product?.imageUrl} alt="Product image" className='object-contain' />
       </Box>
 
       {product && (
