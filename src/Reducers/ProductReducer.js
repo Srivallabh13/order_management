@@ -205,7 +205,7 @@ export const CartReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART:
 
-                const { productID, productName,description, price, quantity } = action.payload;
+                const { productID, productName,description, price, quantity, imageUrl } = action.payload;
                 
                 const existingItemIndex = state.products.findIndex(item => item.productID === productID);
                 
@@ -218,7 +218,7 @@ export const CartReducer = (state = initialState, action) => {
                         products: updatedItems
                     };
                 } else {
-                    const newItems = [...state.products, { productID, description, productName, price, quantity }];
+                    const newItems = [...state.products, { productID, description, productName, price, quantity, imageUrl }];
                     saveCart(newItems); 
                     return {
                         ...state,

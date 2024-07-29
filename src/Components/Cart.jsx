@@ -6,19 +6,30 @@ import { CheckInventory, clearCart, UpdateCart } from '../Actions/ProductActions
 import { useNavigate } from 'react-router-dom'; 
 import { useAlert } from 'react-alert'
 import axios from 'axios'
+import { getUserById } from '../Actions/UserActions'
 
 const Cart = () => {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
-  const alert = useAlert();
+  const alert =  useAlert();
 
   const {products} = useSelector((state)=>state.cart);
   const {user} = useSelector((state)=>state.currentUser)
   const dispatch = useDispatch();
   const navigate = useNavigate();  
+  const {user:userDetails, loading:loadingUser} = useSelector((state)=>state.userById);
+
+  useEffect(()=>{
+    dispatch(getUserById(user?.id));
+  }, [dispatch, user?.id])
 
   const handleCheckout = async (products) => {
     try {
+      if(userDetails?.phoneNumber === null || userDetails?.phoneNumber?.length === 0 || userDetails?.pinCode <= 0 || userDetails?.city === null || userDetails?.city?.length === 0 || userDetails?.address === null || userDetails?.address?.length === 0 || userDetails?.fullName === null || userDetails?.fullName?.length === 0) {
+        alert.error("Please update your profile.");
+        navigate('/profile');
+        return;
+      }
       setLoading(true);
       let cartProducts = [];
       let productsInCart = [];
@@ -74,7 +85,7 @@ const Cart = () => {
 
   return (
     <Box className='w-full flex py-10 px-24 gap-6'>
-      {loading &&  (
+      {loading && loadingUser &&   (
         <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
           <LinearProgress color='secondary' />
         </Box>
@@ -87,16 +98,16 @@ const Cart = () => {
       <>
         <Typography className='font-bold'> Products in Cart</Typography>
         <Divider color='black' variant='fullWidth' />
-          <div className="h-[450px] overflow-y-scroll">
-
+          <div className="h-[480px] overflow-y-scroll">
           {products && products.map(product => (
             <CartProductCard 
-            id = {product.productID}
-            name={product.productName}
-            price={product.price}
-            desc={product.description}
-            quantity={product.quantity}
-            onQuantityChange={handleQuantityChange}
+              id = {product.productID}
+              imageUrl = {product?.imageUrl}
+              name={product.productName}
+              price={product.price}
+              desc={product.description}
+              quantity={product.quantity}
+              onQuantityChange={handleQuantityChange}
             />
           ))}
           </div>

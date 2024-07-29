@@ -33,6 +33,7 @@ export const getUser = () => async(dispatch)=> {
         }) 
     }
 }
+
 export const LoginUser = (formData) => async(dispatch)=> {
     try {
         dispatch({
@@ -147,6 +148,7 @@ export const DeleteUser = (id) => async(dispatch)=> {
             type:DELETE_USER_SUCCESS,
             payload: data
         })
+        return data;
     } catch (error) {
         dispatch({
             type:DELETE_USER_FAIL,

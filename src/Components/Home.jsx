@@ -86,7 +86,7 @@ const Home = () => {
 
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div className="relative ">

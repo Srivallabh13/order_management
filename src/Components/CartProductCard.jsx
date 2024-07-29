@@ -1,10 +1,9 @@
 import { Box, Divider, FormControl, InputLabel, MenuItem, Select, Stack, Typography } from '@mui/material';
-import logo from '../assets/Images/iphone12.jpg';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { RemoveFromCart } from '../Actions/ProductActions';
 
-const CartProductCard = ({ id, name, price, desc, quantity, onQuantityChange }) => {
+const CartProductCard = ({ id, name, price, desc, quantity, onQuantityChange, imageUrl }) => {
   const dispatch = useDispatch();
 
   const handleChange = (event) => {
@@ -18,13 +17,13 @@ const CartProductCard = ({ id, name, price, desc, quantity, onQuantityChange }) 
 
   return (
     <>
-      <Box className="w-full p-2">
-        <Stack direction={'row'} gap={2}>
-          <img src={logo} alt="ProductImage" width={100} className='p-2' height={100} />
+      <Box className="w-full p-4">
+        <Stack direction={'row'} gap={4}>
+          <img src={imageUrl} alt="ProductImage" width={150} className=' object-contain' height={150} />
           <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} className='w-full'>
             <Stack direction={'column'}>
-              <Typography fontWeight={600} variant='h6'>{name}</Typography>
-              <Typography variant='caption'>{desc}</Typography>
+              <Typography fontWeight={600} className="line-clamp-2" variant='h6'>{name}</Typography>
+              <Typography variant='caption' className="line-clamp-3">{desc}</Typography>
               <button onClick={handleClick} className='text-blue-600 w-fit'>Remove</button>
             </Stack>
             <Stack direction={'row'} alignItems={'center'} gap={3} mx={2}>

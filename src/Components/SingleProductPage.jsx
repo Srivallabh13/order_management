@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import logo from "../assets/Images/iphone12.jpg";
 import { Box, Button, Divider, Fab, LinearProgress, Stack, Typography } from '@mui/material';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
@@ -42,6 +41,11 @@ const SingleProductPage = () => {
 
   const handleBuyNow = async (product, quantity) => {
     try {
+      if(userDetails?.phoneNumber === null || userDetails?.phoneNumber?.length === 0 || userDetails?.pinCode <= 0 || userDetails?.city === null || userDetails?.city?.length === 0 || userDetails?.address === null || userDetails?.address?.length === 0 || userDetails?.fullName === null || userDetails?.fullName?.length === 0) {
+        alert.error("Please update your profile.");
+        navigate('/profile');
+        return;
+      }
       setLoading(true);
 
       const orderData = {
@@ -94,8 +98,6 @@ const SingleProductPage = () => {
       }
 
       <Box className='flex w-[40%]'>
-        {/* <Box className='w-full h-[90%] my-auto' style={{ backgroundImage: `url(${product?.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center', borderRadius: '10px' }}>
-        </Box> */}
         <img src={product?.imageUrl} alt="Product image" className='object-contain' />
       </Box>
 

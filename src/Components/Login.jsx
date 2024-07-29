@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { LoginUser } from '../Actions/UserActions';
-import { Box, LinearProgress, Typography } from '@mui/material';
+import { Box, LinearProgress, Stack, Typography } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
+import Image from '../assets/Images/login.jpg'
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -39,38 +40,36 @@ const Login = () => {
   };
 
   return (
-    <div className='flex w-full h-full justify-center items-center'>
+    <Stack direction={'row'} gap={2} className='flex w-full h-full justify-around items-center'>
       {loading && (
         <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
           <LinearProgress color='secondary' />
         </Box>
       )}
-
-      <form action="" onSubmit={handleSubmit}>
-
-
-        <div className='flex-col w-64 h-full space-y-3'>
-          <p className='text-3xl '>Login</p>
-          <label className='block' htmlFor='email'>Email*</label>
-          <input value={email} onChange={(e) => setEmail(e.target.value)} className='border w-full p border-black rounded-lg p-3' required type="email" placeholder='john@gmail.com' />
-          <label htmlFor='password'>Password*</label>
-          <input value={password} onChange={(e) => setPassword(e.target.value)} className='border w-full border-black rounded-lg p-3' required type="password" placeholder='******' />
-          {error &&
-          <Box className ="w-full h-fit p-3 border-2 border-red-600 align-middle text-center bg-red-50"> 
-            <Typography variant='subtitle1'>{error}</Typography>
-          </Box>
-          }
-          <button disabled={loading} className='p-3 rounded-md w-full bg-purple-400'>Submit</button>
-        </div>
-        <Typography p={1} variant='subtitle1'> Don't have an account?
-          <Link to={'/register'}>
-            <span aria-disabled={loading} className='text-blue-700'>
-              Sign Up
-            </span>
-          </Link>
-        </Typography>
-      </form>
-    </div>
+        <img src={Image} height={500} className='w-[40%] object-cover' alt="" />
+        <form action="" onSubmit={handleSubmit}>
+          <div className='flex-col w-64 h-full space-y-3'>
+            <p className='text-3xl '>Login</p>
+            <label className='block' htmlFor='email'>Email*</label>
+            <input value={email} onChange={(e) => setEmail(e.target.value)} className='border w-full p border-black rounded-lg p-3' required type="email" placeholder='john@gmail.com' />
+            <label htmlFor='password'>Password*</label>
+            <input value={password} onChange={(e) => setPassword(e.target.value)} className='border w-full border-black rounded-lg p-3' required type="password" placeholder='******' />
+            {error &&
+            <Box className ="w-full h-fit p-3 border-2 border-red-600 align-middle text-center bg-red-50"> 
+              <Typography variant='subtitle1'>{error}</Typography>
+            </Box>
+            }
+            <button disabled={loading} className='p-3 rounded-md w-full bg-purple-400'>Submit</button>
+          </div>
+          <Typography p={1} variant='subtitle1'> Don't have an account?
+            <Link to={'/register'}>
+              <span aria-disabled={loading} className='text-blue-700'>
+                Sign Up
+              </span>
+            </Link>
+          </Typography>
+        </form>
+    </Stack>
   );
 }
 
