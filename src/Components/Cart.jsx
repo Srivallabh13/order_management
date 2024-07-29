@@ -11,14 +11,25 @@ import axios from 'axios'
 const Cart = () => {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
+    const [showUpdateAddress, setShowUpdateAddress] = useState(false);
+
   const alert = useAlert();
+  const { user } = useSelector((state) => state.currentUser);
+  const { user: userDetails, loading: loadingUser } = useSelector((state) => state.userById);
 
   const {products} = useSelector((state)=>state.cart);
-  const {user} = useSelector((state)=>state.currentUser)
   const dispatch = useDispatch();
   const navigate = useNavigate();  
 
-  const handleCheckout = async (products) => {
+
+
+    const handleCheckout = async (products) => 
+    {
+      if (!userDetails?.address || !userDetails?.pinCode) {
+        alert.error("Please update your profile with an address.");
+        navigate('/profile'); // Redirect to profile page if address is null
+        return;
+      }
     try {
       setLoading(true);
       let cartProducts = [];
@@ -36,6 +47,8 @@ const Cart = () => {
         custId: user.id, 
         price: total
       };
+
+      console.log('Order data:', orderData);
   
       const result = await dispatch(CheckInventory(productsInCart));
       console.log(result);
@@ -72,6 +85,7 @@ const Cart = () => {
     });
     setAmount(totalAmount);
   }, [products]);
+  
 
   return (
     <Box className='w-full flex py-10 px-24 gap-6'>
