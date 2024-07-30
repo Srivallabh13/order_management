@@ -64,7 +64,7 @@ import { getProducts } from '../Actions/ProductActions';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getUser } from '../Actions/UserActions';
-import { Pagination } from '@mui/material';
+// import { Pagination } from '@mui/material';
 import CarouselComponent from '../Utils/Carousel';
 
 const Home = () => {
@@ -72,21 +72,21 @@ const Home = () => {
   const { products } = useSelector((state) => state.products);
   const { user } = useSelector((state) => state.currentUser);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const productsPerPage = 12;
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const productsPerPage = 12;
 
   useEffect(() => {
     dispatch(getProducts());
     dispatch(getUser());
   }, [dispatch]);
 
-  const handleChangePage = (event, value) => {
-    setCurrentPage(value);
-  };
+  // const handleChangePage = (event, value) => {
+  //   setCurrentPage(value);
+  // };
 
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
+  // const indexOfLastProduct = currentPage * productsPerPage;
+  // const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  // const currentProducts = products?.slice(indexOfFirstProduct, indexOfLastProduct);
 
   return (
     <div className="relative ">
