@@ -3,11 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser } from '../Actions/UserActions';
 import LogoutIcon from '@mui/icons-material/Logout';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Home } from '@mui/icons-material';
 import { Avatar, Badge, Stack, Typography } from '@mui/material';
-import Login from './Login';
+import SearchBar from './SearchBar';
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -24,11 +23,14 @@ const Navbar = () => {
   const { products } = useSelector((state) => state.cart);
 
   return (
-    <div className="text-white flex flex-row w-full justify-between py-4 md:px-10 px-3 bg-sky-950">
+    <div style={{alignItems:"center"}} className="text-white flex flex-row w-full justify-between py-4 md:px-10 px-3 bg-sky-950">
       <Link to={'/'}>
         <span className='text-lg font-semibold'>ORDER MANAGEMENT SYSTEM</span>
       </Link>
-      <ul className="flex flex-row gap-4 md:gap-12">
+      {user && 
+        <SearchBar />
+      }
+      <ul style={{alignItems:"center"}} className="flex flex-row h-full gap-4 md:gap-12">
       {user && loading ===false && user?.role === 'admin' &&
             <Link to={'/admin/dashboard'}>
               <li>

@@ -26,6 +26,7 @@ import ProductList from './Components/Admin/ProductList';
 import Profile from './Components/Profile';
 import { Box, LinearProgress } from '@mui/material';
 import PageNotFound from './Utils/PageNotFound';
+import SearchResult from './Components/SearchResult';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
@@ -62,6 +63,7 @@ function App() {
                 <Route path="/orderdetails/:id" element={<OrderDetails />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/search" element={<SearchResult />} />
                 <Route path="/security" element={<LoginSecurity />} />
                 <Route path="/orderSuccess" element={<OrderSuccess />} />
                 {user?.role === "admin" && 
