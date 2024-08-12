@@ -89,7 +89,6 @@ export const RegisterUser = (formData) => async(dispatch)=> {
             type:REGISTER_FAIL,
             payload: error
         }) 
-        console.log(error)
         throw error;
     }
 }
@@ -221,13 +220,13 @@ export const updatePassword = (id, formData) => async (dispatch) => {
       dispatch({ type: UPDATE_PASSWORD_REQUEST });
   
       const config = { headers: { "Content-Type": "application/json" } };
-      console.log(formData);
       const { data } = await axios.put(`/User/${id}/password`, formData, config);
   
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
         payload: data,
       });
+      return data;
     } catch (error) {
       dispatch({
         type: UPDATE_PASSWORD_FAIL,

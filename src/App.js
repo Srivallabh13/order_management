@@ -43,15 +43,14 @@ function App() {
   }, [dispatch]);
   
   return (
-    <div className='flex flex-col h-screen'>
-      {loading && (
-        <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
-          <LinearProgress color='secondary' />
-        </Box>
-      )}
-      <BrowserRouter>
+    <BrowserRouter>
+        {loading && (
+          <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+            <LinearProgress color='secondary' />
+          </Box>
+        )}
+        <Box sx={{height:"100%"}}>
         <Navbar />
-        <div className='flex-1 overflow-y-auto h-fit'>
           <Routes>
             <Route path="/" element={<Home />} />
             {user && user!==null ? 
@@ -89,9 +88,8 @@ function App() {
             }
 
           </Routes>
-        </div>
+        </Box>
       </BrowserRouter>
-    </div>
   );
 }
 export default App;

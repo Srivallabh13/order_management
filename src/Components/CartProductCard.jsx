@@ -18,37 +18,35 @@ const CartProductCard = ({ id, name, price, desc, quantity, onQuantityChange, im
   return (
     <>
       <Box className="w-full p-4">
-        <Stack direction={'row'} gap={4}>
-          <img src={imageUrl} alt="ProductImage" width={150} className=' object-contain' height={150} />
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} className='w-full'>
-            <Stack direction={'column'}>
+        <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+          <img src={imageUrl} alt="ProductImage" width={150} className='object-contain' height={150} />
+          <Stack direction='row' justifyContent='space-between' alignItems='center' className='w-full'>
+            <Stack direction='column'>
               <Typography fontWeight={600} className="line-clamp-2" variant='h6'>{name}</Typography>
               <Typography variant='caption' className="line-clamp-3">{desc}</Typography>
-              <button onClick={handleClick} className='text-blue-600 w-fit'>Remove</button>
+              <button onClick={handleClick} className='text-blue-600 w-fit mt-2'>Remove</button>
             </Stack>
-            <Stack direction={'row'} alignItems={'center'} gap={3} mx={2}>
+            <Stack direction='row' alignItems='center' gap={2} mx={2}>
               <Typography>₹{price * quantity}</Typography>
-              <FormControl sx={{ m: 1, minWidth: 70 }} size="small">
-                <InputLabel id="demo-select-small-label">Quantity</InputLabel>
+              <FormControl sx={{ minWidth: 70 }} size="small">
+                <InputLabel id="quantity-select-label">Quantity</InputLabel>
                 <Select
-                  labelId="demo-select-small-label"
-                  id="demo-select-small"
+                  labelId="quantity-select-label"
+                  id="quantity-select"
                   value={quantity}
                   label="Quantity"
                   onChange={handleChange}
                 >
-                  <MenuItem value={1}>1</MenuItem>
-                  <MenuItem value={2}>2</MenuItem>
-                  <MenuItem value={3}>3</MenuItem>
-                  <MenuItem value={4}>4</MenuItem>
-                  <MenuItem value={5}>5</MenuItem>
+                  {[1, 2, 3, 4, 5].map(value => (
+                    <MenuItem key={value} value={value}>{value}</MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Stack>
           </Stack>
         </Stack>
       </Box>
-      <Divider variant='middle'></Divider>
+      <Divider variant='middle' />
     </>
   );
 };

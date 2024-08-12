@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { LoginUser } from '../Actions/UserActions';
-import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, LinearProgress, OutlinedInput, Stack, TextField, Typography } from '@mui/material';
+import { Box, Button, FormControl, IconButton, InputAdornment, InputLabel, LinearProgress, OutlinedInput, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAlert } from 'react-alert';
 import Image from '../assets/Images/login.jpg'
@@ -13,6 +13,8 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const navigate = useNavigate();
@@ -36,7 +38,8 @@ const Login = () => {
         alert.error("Incorrect Email or password");
         setError("Incorrect Email or password.");
       } else {
-        setError("An error occurred. Please try again.");
+        console.log(error)
+        setError(`An error occurred. Please try again. ${error}`);
       }
     }
   };
@@ -47,7 +50,7 @@ const Login = () => {
   };
 
   return (
-    <Stack direction={'row'} spacing={2} className='flex w-full h-full justify-around items-center'>
+    <Stack direction={isMobile? 'column':'row'} sx={{justifyContent:isMobile? 'center' : 'space-around'}} spacing={2} className=' w-full h-[89vh] items-center'>
       {loading && (
         <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
           <LinearProgress color='secondary' />
@@ -58,7 +61,8 @@ const Login = () => {
           animation-duration: 3s; /* Adjust the duration as needed */
         }
       `}</style>
-        <img src={Image} height={500} className='w-[40%] object-cover animate-bounce slow-bounce' alt="" />
+          <img src={Image} height={500} style={{display:isMobile?'none':'block'}} className='w-[40%] -z-50 object-cover animate-bounce slow-bounce' alt="" />
+
         <form action="" onSubmit={handleSubmit}>
           <div className='flex-col w-64 h-full space-y-5'>
             <p className='text-3xl '>Login</p>
@@ -98,14 +102,14 @@ const Login = () => {
             </Box>
             }
             <Button variant='contained' type='submit' color='secondary' disabled={loading} fullWidth sx={{p:1.2, fontSize:"1rem"}}>Submit</Button>
+            <Typography p={1} variant='subtitle1'> Don't have an account? 
+              <Link to={'/register'}>
+                <span aria-disabled={loading} className='text-blue-700'>
+                  {`${" "} Sign Up`}
+                </span>
+              </Link>
+            </Typography>
           </div>
-          <Typography p={1} variant='subtitle1'> Don't have an account? 
-            <Link to={'/register'}>
-              <span aria-disabled={loading} className='text-blue-700'>
-                {`${" "} Sign Up`}
-              </span>
-            </Link>
-          </Typography>
         </form>
     </Stack>
   );
