@@ -26,10 +26,16 @@ import ProductList from './Components/Admin/ProductList';
 import Profile from './Components/Profile';
 import { Box, LinearProgress } from '@mui/material';
 import PageNotFound from './Utils/PageNotFound';
+import SearchResult from './Components/SearchResult';
 
 function App() {
   axios.defaults.baseURL = "http://localhost:5062/api"
   const { user, loading } = useSelector((state)=>state.currentUser);
+  const token = user?.token;
+  if(token) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  }
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -37,15 +43,14 @@ function App() {
   }, [dispatch]);
   
   return (
-    <div className='flex flex-col h-screen'>
-      {loading && (
-        <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
-          <LinearProgress color='secondary' />
-        </Box>
-      )}
-      <BrowserRouter>
+    <BrowserRouter>
+        {loading && (
+          <Box sx={{ width: '100%', position: 'absolute', top: 0, left: 0 }}>
+            <LinearProgress color='secondary' />
+          </Box>
+        )}
+        <Box sx={{height:"100%"}}>
         <Navbar />
-        <div className='flex-1 overflow-y-auto h-fit'>
           <Routes>
             <Route path="/" element={<Home />} />
             {user && user!==null ? 
@@ -57,6 +62,7 @@ function App() {
                 <Route path="/orderdetails/:id" element={<OrderDetails />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/search" element={<SearchResult />} />
                 <Route path="/security" element={<LoginSecurity />} />
                 <Route path="/orderSuccess" element={<OrderSuccess />} />
                 {user?.role === "admin" && 
@@ -82,9 +88,8 @@ function App() {
             }
 
           </Routes>
-        </div>
+        </Box>
       </BrowserRouter>
-    </div>
   );
 }
 export default App;

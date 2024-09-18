@@ -21,7 +21,7 @@ export default function Contact() {
             <HeadsetMicIcon fontSize='large' /> Contact <span className="text-coral">Me</span>
           </Typography>
           <div className="content flex flex-col md:flex-row items-center justify-between bg-white shadow-lg rounded-2xl p-6 mb-10">
-            <div className="person w-full md:w-2/4 mb-6 md:mb-0">
+            <div className="person  w-full md:w-2/4 mb-6 md:mb-0">
               <img src={working} className="w-full h-auto" alt="cabinet" />
             </div>
             <form onSubmit={handleSubmit} className="w-full md:w-2/4">

@@ -13,6 +13,7 @@ import { useDispatch } from "react-redux";
 import { CreateProduct, getProducts } from "../../Actions/ProductActions";
 import { useNavigate } from "react-router-dom";
 import { Box, LinearProgress } from "@mui/material";
+import { Image } from "@mui/icons-material";
 
 const NewProduct = ({ history }) => {
   const alert = useAlert();
@@ -22,6 +23,7 @@ const NewProduct = ({ history }) => {
   const [description, setDescription] = useState("");
   const [stock, setStock] = useState();
   const [threshold, setThreshold] = useState();
+  const [imageUrl, setImageUrl] = useState();
   const [loading, setLoading] = useState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -35,6 +37,7 @@ const NewProduct = ({ history }) => {
     formData.append("price", price);
     formData.append("stockLevel", stock);
     formData.append("threshold", threshold);
+    formData.append("imageUrl", imageUrl);
 
     dispatch(CreateProduct(formData)).then(() => {
       dispatch(getProducts());
@@ -120,6 +123,18 @@ const NewProduct = ({ history }) => {
               required
               value={stock}
               onChange={(e) => setStock(e.target.value)}
+              className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
+            />
+          </div>
+
+          <div className="w-full relative flex items-center mb-4">
+            <Image className="absolute left-4 text-gray-600" />
+            <input
+              type="url"
+              placeholder="Image url"
+              required
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
               className="pl-12 pr-4 py-2 border border-gray-300 rounded-md w-full focus:outline-none focus:border-gray-500"
             />
           </div>

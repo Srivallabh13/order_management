@@ -8,7 +8,7 @@ export const getUser = () => async(dispatch)=> {
             type:USER_REQUEST
         })
         var token = localStorage.getItem('jwt');
-        console.log(token);
+        // console.log(token);
         if(token!=null) {
             const { data } = await axios.get('/Account', {
                 headers: {
@@ -33,6 +33,7 @@ export const getUser = () => async(dispatch)=> {
         }) 
     }
 }
+
 export const LoginUser = (formData) => async(dispatch)=> {
     try {
         dispatch({
@@ -53,10 +54,14 @@ export const LoginUser = (formData) => async(dispatch)=> {
         })
         dispatch(getUser());
     } catch (error) {
-        dispatch({
-            type:LOGIN_FAIL,
-            payload: error
-        }) 
+        const errorMessage = error.response && error.response.data.message 
+            ? error.response.data.message 
+            : error.message;
+            dispatch({
+                type:LOGIN_FAIL,
+                payload: errorMessage
+            }) 
+            throw error;
     }
 }
 
@@ -66,20 +71,25 @@ export const RegisterUser = (formData) => async(dispatch)=> {
             type:REGISTER_REQUEST
         })
 
+        
         const {data} = await axios.post('/Account/register', formData, {
             headers: {
-              'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             }
         });
+        localStorage.setItem('jwt', data.token);
+        
         dispatch({
             type:REGISTER_SUCCESS,
             payload: data
         })
+        return data;
     } catch (error) {
         dispatch({
             type:REGISTER_FAIL,
             payload: error
         }) 
+        throw error;
     }
 }
 
@@ -137,6 +147,7 @@ export const DeleteUser = (id) => async(dispatch)=> {
             type:DELETE_USER_SUCCESS,
             payload: data
         })
+        return data;
     } catch (error) {
         dispatch({
             type:DELETE_USER_FAIL,
@@ -209,13 +220,13 @@ export const updatePassword = (id, formData) => async (dispatch) => {
       dispatch({ type: UPDATE_PASSWORD_REQUEST });
   
       const config = { headers: { "Content-Type": "application/json" } };
-      console.log(formData);
       const { data } = await axios.put(`/User/${id}/password`, formData, config);
   
       dispatch({
         type: UPDATE_PASSWORD_SUCCESS,
         payload: data,
       });
+      return data;
     } catch (error) {
       dispatch({
         type: UPDATE_PASSWORD_FAIL,

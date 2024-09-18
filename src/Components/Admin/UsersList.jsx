@@ -38,7 +38,7 @@ const UsersList = ({ history }) => {
 
   useEffect(() => {
     if (allUsers) {
-      setUsers(allUsers);
+      setUsers(allUsers.filter(client=>client?.id !== user?.id));
     }
   }, [allUsers]);
 

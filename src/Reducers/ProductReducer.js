@@ -1,4 +1,4 @@
-import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL, UPDATE_PRODUCT_FAIL, UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_REQUEST} from '../Constants/ProductConstants'
+import {ALL_PRODUCT_FAIL, ALL_PRODUCT_SUCCESS, ALL_PRODUCT_REQUEST, CLEAR_ERRORS, PRODUCT_DETAILS_FAIL, PRODUCT_DETAILS_SUCCESS, PRODUCT_DETAILS_REQUEST, ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART, CLEAR_CART_STATE, CREATE_PRODUCT_REQUEST, CREATE_PRODUCT_SUCCESS, CREATE_PRODUCT_FAIL, DELETE_PRODUCT_REQUEST, DELETE_PRODUCT_SUCCESS, DELETE_PRODUCT_FAIL, UPDATE_PRODUCT_FAIL, UPDATE_PRODUCT_SUCCESS, UPDATE_PRODUCT_REQUEST, INVENTORY_SUCCESS, INVENTORY_REQUEST, INVENTORY_FAIL, ISAVAILABLE_REQUEST, ISAVAILABLE_SUCCESS, ISAVAILABLE_FAIL, SEARCH_PRODUCT_SUCCESS, SEARCH_PRODUCT_REQUEST, SEARCH_PRODUCT_FAIL} from '../Constants/ProductConstants'
 
 export const ProductReducer = (state = {products:[]}, action) => {
     switch (action.type) {
@@ -139,6 +139,64 @@ export const UpdateProductReducer = (state = {message:{}}, action) => {
     }
 };
 
+export const CheckInventoryReducer = (state = {outOfStockProducts:null}, action) => {
+    switch (action.type) {
+        case INVENTORY_REQUEST:
+            return {
+                loading:true,
+                outOfStockProducts:null
+            };
+        case INVENTORY_SUCCESS:
+            return {
+                loading:false,
+                outOfStockProducts:action.payload,
+            };
+        case INVENTORY_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+export const IsAvailableReducer = (state = {isAvailable:null}, action) => {
+    switch (action.type) {
+        case ISAVAILABLE_REQUEST:
+            return {
+                loading:true,
+                isAvailable:null
+            };
+        case ISAVAILABLE_SUCCESS:
+            return {
+                loading:false,
+                isAvailable:action.payload,
+            };
+        case ISAVAILABLE_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
+};
+
+
+
 const initialState = {
     products: JSON.parse(sessionStorage.getItem('cart')) || []
 };
@@ -147,7 +205,7 @@ export const CartReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART:
 
-                const { productID, productName,description, price, quantity } = action.payload;
+                const { productID, productName,description, price, quantity, imageUrl } = action.payload;
                 
                 const existingItemIndex = state.products.findIndex(item => item.productID === productID);
                 
@@ -160,7 +218,7 @@ export const CartReducer = (state = initialState, action) => {
                         products: updatedItems
                     };
                 } else {
-                    const newItems = [...state.products, { productID, description, productName, price, quantity }];
+                    const newItems = [...state.products, { productID, description, productName, price, quantity, imageUrl }];
                     saveCart(newItems); 
                     return {
                         ...state,
@@ -208,4 +266,32 @@ export const CartReducer = (state = initialState, action) => {
                             };
 const saveCart = (cartItems) => {
     sessionStorage.setItem('cart', JSON.stringify(cartItems));
+};
+
+export const SearchProductReducer = (state = {products:null}, action) => {
+    switch (action.type) {
+        case SEARCH_PRODUCT_REQUEST:
+            return {
+                loading:true,
+                products:null
+            };
+        case SEARCH_PRODUCT_SUCCESS:
+            return {
+                loading:false,
+                products:action.payload,
+            };
+        case SEARCH_PRODUCT_FAIL:
+            return {
+                loading:false,
+                error: action.payload
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                error:null
+            };
+    
+        default:
+            return state;
+    }
 };
